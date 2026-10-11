@@ -1,0 +1,14 @@
+[
+  {
+    "cartaoCredito": "1234567812345678",
+    "idsAgendamentos": [
+      10
+    ],
+    "id": 1,
+    "nome": "Ana",
+    "endereco": "Rua A",
+    "telefone": "3899999-0000",
+    "email": "ana@email.com",
+    "cpfAnonimizado": "xxx.123.xxx-45"
+  }
+]
