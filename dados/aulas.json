@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "tipoAula": "SPINNING",
+    "idSala": 1,
+    "idInstrutor": 4,
+    "dataHora": "2026-10-20T08:00",
+    "vagasOcupadas": 14
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "idAgendamento": 3,
+    "valor": 80.0,
+    "data": "2026-10-20",
+    "tipo": "COBRANCA"
+  },
+  {
+    "id": 2,
+    "idAgendamento": 3,
+    "valor": 40.0,
+    "data": "2026-10-25",
+    "tipo": "REEMBOLSO"
+  }
+]
