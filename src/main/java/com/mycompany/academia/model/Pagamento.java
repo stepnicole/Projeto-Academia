@@ -1,5 +1,7 @@
 package com.mycompany.academia.model;
 
+import com.mycompany.academia.model.enums.TipoPagamento;
+import com.mycompany.academia.model.enums.StatusAgendamento;
 import java.time.LocalDate;
 
 /**

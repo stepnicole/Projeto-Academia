@@ -1,5 +1,7 @@
 package com.mycompany.academia.model;
 
+import com.mycompany.academia.model.enums.StatusAgendamento;
+import com.mycompany.academia.model.enums.TipoAgendamento;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;

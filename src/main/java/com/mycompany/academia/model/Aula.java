@@ -1,5 +1,6 @@
 package com.mycompany.academia.model;
 
+import com.mycompany.academia.model.enums.TipoAula;
 import java.time.LocalDateTime;
 
 public class Aula {

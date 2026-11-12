@@ -1,5 +1,7 @@
 package com.mycompany.academia.model;
 
+import com.mycompany.academia.model.enums.TipoAula;
+
 public class Instrutor extends Pessoa {
 
     private TipoAula especialidade;

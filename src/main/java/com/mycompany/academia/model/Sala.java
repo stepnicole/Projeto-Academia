@@ -1,5 +1,6 @@
 package com.mycompany.academia.model;
 
+import com.mycompany.academia.model.enums.TipoAula;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

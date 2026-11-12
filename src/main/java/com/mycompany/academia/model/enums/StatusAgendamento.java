@@ -1,4 +1,4 @@
-package com.mycompany.academia.model;
+package com.mycompany.academia.model.enums;
 
 /**
  * Situação do agendamento: preliminar até 5 dias úteis antes de acessar a
