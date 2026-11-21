@@ -1,15 +1,16 @@
 package com.mycompany.academia.model;
 
-import com.mycompany.academia.model.enums.TipoPagamento;
 import com.mycompany.academia.model.enums.StatusAgendamento;
+import com.mycompany.academia.model.enums.TipoPagamento;
 import java.time.LocalDate;
 
 /**
  * Movimentação financeira ligada a um agendamento: a cobrança feita no cartão
  * na confirmação ou o reembolso devolvido ao cliente no cancelamento.
  * Guarda apenas o id do agendamento, para facilitar a gravação em JSON.
+ *
  */
-public class Pagamento {
+public class Pagamento implements Identificador {
 
     private int id;
     private int idAgendamento;
@@ -69,6 +70,7 @@ public class Pagamento {
                 data, TipoPagamento.REEMBOLSO);
     }
 
+    @Override
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

@@ -5,7 +5,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Sala {
+/**
+ * Sala de exercícios. As 4 salas da academia são armazenadas de forma
+ * <b>estática</b> (lista {@code static final} preenchida num bloco
+ * {@code static}), pois são fixas e iguais para todo o sistema.
+ *
+ */
+public class Sala implements Identificador {
 
     private static final List<Sala> SALAS = new ArrayList<>();
 
@@ -21,6 +27,12 @@ public class Sala {
     private TipoAula tipoAula;
     private int capacidade;
 
+    /**
+     * @param id         identificador
+     * @param nome       nome da sala
+     * @param tipoAula   modalidade praticada
+     * @param capacidade número máximo de alunos
+     */
     public Sala(int id, String nome, TipoAula tipoAula, int capacidade) {
         this.id = id;
         this.nome = nome;
@@ -28,11 +40,17 @@ public class Sala {
         this.capacidade = capacidade;
     }
 
-
+    /**
+     * @return as 4 salas (lista somente leitura)
+     */
     public static List<Sala> getSalas() {
         return Collections.unmodifiableList(SALAS);
     }
 
+    /**
+     * @param id id da sala
+     * @return a sala ou null
+     */
     public static Sala buscarPorId(int id) {
         for (Sala s : SALAS) {
             if (s.getId() == id) {
@@ -42,6 +60,10 @@ public class Sala {
         return null;
     }
 
+    /**
+     * @param tipo modalidade
+     * @return a sala da modalidade ou null
+     */
     public static Sala buscarPorTipo(TipoAula tipo) {
         for (Sala s : SALAS) {
             if (s.getTipoAula() == tipo) {
@@ -51,6 +73,7 @@ public class Sala {
         return null;
     }
 
+    @Override
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
