@@ -1,10 +1,34 @@
 package com.mycompany.academia.model.enums;
 
 /**
- * Situação do agendamento: preliminar até a confirmação do cliente (até 5 dias
- * úteis antes de acessar a academia), confirmado após a confirmação, realizado
- * depois que a data da aula passa e cancelado se expirar ou for desfeito.
+ * Situação do agendamento. É o que fica gravado no JSON; o objeto de estado
+ * (padrão State) é recriado a partir dele pela
+ * {@link com.mycompany.academia.model.state.EstadoFactory}.
+ * <ul>
+ *   <li>PRELIMINAR: reservado, aguardando confirmação (até 5 dias úteis antes);</li>
+ *   <li>CONFIRMADO: confirmado e cobrado no cartão;</li>
+ *   <li>REALIZADO: a aula já aconteceu;</li>
+ *   <li>CANCELADO: expirou ou foi desfeito.</li>
+ * </ul>
+ *
  */
 public enum StatusAgendamento {
-    PRELIMINAR, CONFIRMADO, REALIZADO, CANCELADO
+    PRELIMINAR("Preliminar"),
+    CONFIRMADO("Confirmado"),
+    REALIZADO("Realizado"),
+    CANCELADO("Cancelado");
+
+    private final String descricao;
+
+    StatusAgendamento(String descricao) {
+        this.descricao = descricao;
+    }
+
+    /** @return descrição para exibição */
+    public String getDescricao() { return descricao; }
+
+    @Override
+    public String toString() {
+        return descricao;
+    }
 }

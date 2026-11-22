@@ -1,7 +1,7 @@
 package com.mycompany.academia.model;
 
-import com.mycompany.academia.model.enums.TipoAgendamento;
 import com.mycompany.academia.model.enums.StatusAgendamento;
+import com.mycompany.academia.model.enums.TipoAgendamento;
 import com.mycompany.academia.model.state.EstadoAgendamento;
 import com.mycompany.academia.model.state.EstadoFactory;
 import com.mycompany.academia.model.state.Preliminar;
@@ -12,15 +12,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Agendamento de aula feito por um cliente.
+ * Agendamento de aula feito por um cliente (contexto do padrão State).
  * <p>
  * Nasce como PRELIMINAR e só se torna CONFIRMADO se o cliente confirmar até
  * 5 dias úteis antes do acesso. Se desistir após confirmar, até 3 dias antes
  * da data marcada, recebe metade do valor de volta. Depois que a última data
- * passa, o agendamento confirmado se torna REALIZADO após o dia da aula.
+ * passa, o agendamento confirmado se torna REALIZADO.
+ * <p>
+ * O comportamento de cada operação depende do estado atual e fica nas
+ * classes do pacote {@code state} ({@code Preliminar}, {@code Confirmado},
+ * {@code Realizado}, {@code Cancelado}); esta classe apenas delega.
  * Guarda apenas os ids do cliente e da aula, para facilitar o JSON.
+ *
  */
-public class Agendamento {
+public class Agendamento implements Identificador {
 
     public static final int DIAS_UTEIS_CONFIRMACAO = 5;
     public static final int DIAS_CANCELAMENTO = 3;
@@ -33,9 +38,22 @@ public class Agendamento {
     private double preco;
     private TipoAgendamento tipo;
     private StatusAgendamento status;
+    /** Objeto de estado (State). transient: não vai para o JSON, só o status. */
     private transient EstadoAgendamento estado;
     private LocalDate dataCriacao;
 
+    /**
+     * Cria um agendamento preliminar.
+     *
+     * @param id          identificador
+     * @param idCliente   id do cliente
+     * @param idAula      id da aula escolhida
+     * @param datas       data(s) escolhida(s); para mensalidade, a data de início
+     * @param preco       preço que será cobrado
+     * @param tipo        diária ou mensalidade
+     * @param dataCriacao dia em que o agendamento foi feito
+     * @throws IllegalArgumentException se nenhuma data for informada
+     */
     public Agendamento(int id, int idCliente, int idAula, List<LocalDate> datas,
                        double preco, TipoAgendamento tipo, LocalDate dataCriacao) {
         if (datas == null || datas.isEmpty()) {
@@ -51,11 +69,21 @@ public class Agendamento {
         setEstado(new Preliminar());
     }
 
+    /** @return a data mais próxima entre as datas agendadas */
     public LocalDate getPrimeiraData() {
         return Collections.min(datas);
     }
 
+    /**
+     * Último dia coberto pelo agendamento. Diária: a maior data escolhida.
+     * Mensalidade: um mês a partir da data de início (menos um dia).
+     *
+     * @return último dia coberto
+     */
     public LocalDate getUltimaData() {
+        if (tipo == TipoAgendamento.MENSALIDADE) {
+            return getPrimeiraData().plusMonths(1).minusDays(1);
+        }
         return Collections.max(datas);
     }
 
@@ -80,6 +108,7 @@ public class Agendamento {
 
     /**
      * Último dia em que o cancelamento ainda dá direito a reembolso.
+     *
      * @return primeira data menos 3 dias
      */
     public LocalDate getPrazoCancelamento() {
@@ -110,7 +139,7 @@ public class Agendamento {
 
     /**
      * Confirma o agendamento, se ainda estiver preliminar e dentro do prazo.
-     * A cobrança no cartão será feita pelo sistema após a confirmação.
+     * A cobrança no cartão é feita pelo ControleAgendamentos após a confirmação.
      *
      * @param hoje data em que a confirmação está sendo feita
      * @return true se foi confirmado
@@ -134,7 +163,7 @@ public class Agendamento {
     /**
      * Cancela o agendamento e informa o valor a devolver.
      * Um agendamento preliminar não foi cobrado, então não há reembolso.
-     * Um já cancelado não é alterado.
+     * Um já cancelado ou realizado não é alterado.
      *
      * @param hoje data do cancelamento
      * @return valor a devolver ao cliente
@@ -165,6 +194,26 @@ public class Agendamento {
         return getEstado().concluir(this, hoje);
     }
 
+    /**
+     * Diz se o agendamento dá direito de entrar na academia numa data (usado
+     * pela catraca). Precisa estar confirmado ou realizado (foi pago) e a data
+     * precisa estar coberta: diária, se for uma das datas escolhidas;
+     * mensalidade, se estiver dentro do mês contratado.
+     *
+     * @param data dia do acesso
+     * @return true se o cliente pode entrar nesse dia
+     */
+    public boolean cobreData(LocalDate data) {
+        if (status != StatusAgendamento.CONFIRMADO && status != StatusAgendamento.REALIZADO) {
+            return false;
+        }
+        if (tipo == TipoAgendamento.MENSALIDADE) {
+            return !data.isBefore(getPrimeiraData()) && !data.isAfter(getUltimaData());
+        }
+        return datas.contains(data);
+    }
+
+    @Override
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -184,9 +233,16 @@ public class Agendamento {
     public void setTipo(TipoAgendamento tipo) { this.tipo = tipo; }
 
     public StatusAgendamento getStatus() { return status; }
+
+    /**
+     * Altera o status diretamente (usado na leitura do JSON). O objeto de
+     * estado é recriado sob demanda a partir do novo status.
+     *
+     * @param status novo status
+     */
     public void setStatus(StatusAgendamento status) {
         this.status = status;
-        this.estado = null; // recriado sob demanda a partir do status
+        this.estado = null;
     }
 
     public LocalDate getDataCriacao() { return dataCriacao; }
