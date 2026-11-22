@@ -1,40 +1,43 @@
 package com.mycompany.academia.model.lojinha;
 
-import com.mycompany.academia.model.Identificador;
 import com.mycompany.academia.model.enums.CategoriaProduto;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Subsistema Lojinha: cadastro de produtos, controle de estoque e vendas da
- * lanchonete e da loja de material de esportivos.
+ * Fachada (padrão <b>Facade</b>) do subsistema Lojinha.
  * <p>
- * O {@code ControleLojinha} usa esta classe e cuida das regras que dependem de outras
- * partes (cliente existir, gerar extrato, permissão do usuário).
+ * Não guarda dados nem regras próprias: só coordena as três partes do
+ * subsistema nas operações que envolvem mais de uma delas.
+ * <ul>
+ *   <li>{@link CatalogoProdutos} — quais produtos existem e seus preços;</li>
+ *   <li>{@link Estoque} — quantas unidades há de cada produto;</li>
+ *   <li>{@link HistoricoVendas} — o que já foi vendido.</li>
+ * </ul>
+ * Quem usa a lojinha (o {@code ControleLojinha}) fala só com esta classe e
+ * não precisa saber como ela é organizada por dentro. Operações que envolvem
+ * uma parte só (ex.: buscar produto por nome, ranking de vendas) são feitas
+ * direto na parte, obtida por {@link #getCatalogo()}, {@link #getEstoque()}
+ * ou {@link #getHistoricoVendas()}.
  *
  */
 public class Lojinha {
 
-    private List<Produto> produtos;
+    private final CatalogoProdutos catalogo;
     private Estoque estoque;
-    private List<Venda> vendas;
+    private final HistoricoVendas historicoVendas;
 
     /** Cria a lojinha vazia. */
     public Lojinha() {
-        this.produtos = new ArrayList<>();
+        this.catalogo = new CatalogoProdutos();
         this.estoque = new Estoque();
-        this.vendas = new ArrayList<>();
+        this.historicoVendas = new HistoricoVendas();
     }
 
-    // ------------------------------------------------------------ produtos
-
     /**
-     * Cadastra um produto e já o coloca no estoque.
+     * Cadastra o produto no catálogo e já o coloca no estoque.
      *
      * @param nome             nome
      * @param descricao        descrição
@@ -46,98 +49,28 @@ public class Lojinha {
      */
     public Produto cadastrarProduto(String nome, String descricao, CategoriaProduto categoria,
                                     double preco, int quantidade, int quantidadeMinima) {
-        if (preco < 0 || quantidade < 0) {
-            throw new IllegalArgumentException("Preço e quantidade não podem ser negativos.");
+        if (quantidade < 0) {
+            throw new IllegalArgumentException("Quantidade não pode ser negativa.");
         }
-        Produto p = new Produto(Identificador.proximoId(produtos), nome, descricao, categoria, preco);
-        produtos.add(p);
+        Produto p = catalogo.cadastrar(nome, descricao, categoria, preco);
         estoque.registrarProduto(p.getId(), quantidade, quantidadeMinima);
         return p;
     }
 
     /**
-     * Altera os dados de um produto.
+     * Remove o produto do catálogo e do estoque. Vendas antigas continuam no
+     * histórico, pois cada item de venda guarda o nome e o preço da época.
      *
-     * @param id        id do produto
-     * @param nome      novo nome
-     * @param descricao nova descrição
-     * @param categoria nova categoria
-     * @param preco     novo preço
-     * @return false se o produto não existe
-     */
-    public boolean editarProduto(int id, String nome, String descricao,
-                                 CategoriaProduto categoria, double preco) {
-        Produto p = buscarProduto(id);
-        if (p == null) {
-            return false;
-        }
-        p.setNome(nome);
-        p.setDescricao(descricao);
-        p.setCategoria(categoria);
-        p.setPreco(preco);
-        return true;
-    }
-
-    /**
-     * Remove o produto do cadastro e do estoque. Vendas antigas continuam
-     * guardadas, pois cada item de venda tem o nome e o preço da época.
-     *
-     * @param id id do produto
+     * @param idProduto produto
      * @return true se removeu
      */
-    public boolean removerProduto(int id) {
-        Produto p = buscarProduto(id);
-        if (p == null) {
+    public boolean removerProduto(int idProduto) {
+        if (catalogo.buscar(idProduto) == null) {
             return false;
         }
-        estoque.removerProduto(id);
-        return produtos.remove(p);
+        estoque.removerProduto(idProduto);
+        return catalogo.remover(idProduto);
     }
-
-    /**
-     * @param id id do produto
-     * @return o produto ou null
-     */
-    public Produto buscarProduto(int id) {
-        for (Produto p : produtos) {
-            if (p.getId() == id) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Busca produtos cujo nome contém o texto (sem diferenciar maiúsculas).
-     *
-     * @param texto parte do nome
-     * @return produtos encontrados
-     */
-    public List<Produto> buscarPorNome(String texto) {
-        List<Produto> lista = new ArrayList<>();
-        for (Produto p : produtos) {
-            if (p.getNome().toLowerCase().contains(texto.toLowerCase())) {
-                lista.add(p);
-            }
-        }
-        return lista;
-    }
-
-    /**
-     * @param categoria lanchonete ou loja
-     * @return produtos da categoria
-     */
-    public List<Produto> listarPorCategoria(CategoriaProduto categoria) {
-        List<Produto> lista = new ArrayList<>();
-        for (Produto p : produtos) {
-            if (p.getCategoria() == categoria) {
-                lista.add(p);
-            }
-        }
-        return lista;
-    }
-
-    // ------------------------------------------------------------ estoque
 
     /**
      * Caso de uso "Verificar produto no estoque da lojinha".
@@ -146,7 +79,7 @@ public class Lojinha {
      * @return texto com nome, preço, quantidade e situação do estoque
      */
     public String verificarProduto(int idProduto) {
-        Produto p = buscarProduto(idProduto);
+        Produto p = catalogo.buscar(idProduto);
         if (p == null) {
             return "Produto " + idProduto + " não cadastrado.";
         }
@@ -159,11 +92,9 @@ public class Lojinha {
     }
 
     /**
-     * Repõe o estoque de um produto.
-     *
-     * @param idProduto  id do produto
+     * @param idProduto  produto
      * @param quantidade unidades recebidas
-     * @return false se o produto não existe
+     * @return false se o produto não está no estoque
      */
     public boolean reporEstoque(int idProduto, int quantidade) {
         return estoque.darEntrada(idProduto, quantidade);
@@ -173,7 +104,7 @@ public class Lojinha {
     public List<Produto> produtosParaRepor() {
         List<Produto> lista = new ArrayList<>();
         for (ItemEstoque item : estoque.itensAbaixoDoMinimo()) {
-            Produto p = buscarProduto(item.getIdProduto());
+            Produto p = catalogo.buscar(item.getIdProduto());
             if (p != null) {
                 lista.add(p);
             }
@@ -181,17 +112,16 @@ public class Lojinha {
         return lista;
     }
 
-    // ------------------------------------------------------------ vendas
-
     /**
-     * Registra uma venda. Primeiro confere se todos os itens têm estoque; só
-     * depois dá baixa, para não deixar o estoque pela metade se um item faltar.
+     * Registra uma venda: confere no catálogo e no estoque se todos os itens
+     * existem e estão disponíveis; só depois dá baixa e grava no histórico,
+     * para não deixar o estoque pela metade se um item faltar.
      *
      * @param idCliente cliente que está comprando
      * @param pedido    mapa idProduto → quantidade
      * @param dataHora  momento da venda
      * @return a venda registrada
-     * @throws IllegalArgumentException      se o pedido estiver vazio ou um produto não existir
+     * @throws IllegalArgumentException    se o pedido estiver vazio ou um produto não existir
      * @throws EstoqueInsuficienteExcecao se faltar estoque de algum item
      */
     public Venda registrarVenda(int idCliente, Map<Integer, Integer> pedido, LocalDateTime dataHora) {
@@ -200,7 +130,7 @@ public class Lojinha {
         }
         List<ItemVenda> itens = new ArrayList<>();
         for (Map.Entry<Integer, Integer> e : pedido.entrySet()) {
-            Produto p = buscarProduto(e.getKey());
+            Produto p = catalogo.buscar(e.getKey());
             if (p == null) {
                 throw new IllegalArgumentException("Produto " + e.getKey() + " não cadastrado.");
             }
@@ -216,70 +146,32 @@ public class Lojinha {
         for (ItemVenda item : itens) {
             estoque.darBaixa(item.getIdProduto(), item.getQuantidade());
         }
-        Venda venda = new Venda(Identificador.proximoId(vendas), idCliente, dataHora, itens);
-        vendas.add(venda);
-        return venda;
+        return historicoVendas.registrar(idCliente, itens, dataHora);
     }
 
-    /**
-     * @param inicio primeiro dia (inclusive)
-     * @param fim    último dia (inclusive)
-     * @return vendas do período
-     */
-    public List<Venda> vendasDoPeriodo(LocalDate inicio, LocalDate fim) {
-        List<Venda> lista = new ArrayList<>();
-        for (Venda v : vendas) {
-            LocalDate dia = v.getDataHora().toLocalDate();
-            if (!dia.isBefore(inicio) && !dia.isAfter(fim)) {
-                lista.add(v);
-            }
-        }
-        return lista;
-    }
+    /** @return o catálogo de produtos */
+    public CatalogoProdutos getCatalogo() { return catalogo; }
 
-    /** @return soma de todas as vendas já feitas */
-    public double faturamentoTotal() {
-        double total = 0;
-        for (Venda v : vendas) {
-            total += v.getTotal();
-        }
-        return total;
-    }
-
-    /**
-     * Ranking dos produtos mais vendidos (por unidades).
-     *
-     * @param limite quantos produtos mostrar
-     * @return mapa nome → unidades vendidas, do maior para o menor
-     */
-    public Map<String, Integer> produtosMaisVendidos(int limite) {
-        Map<String, Integer> contagem = new HashMap<>();
-        for (Venda v : vendas) {
-            for (ItemVenda item : v.getItens()) {
-                contagem.merge(item.getNomeProduto(), item.getQuantidade(), Integer::sum);
-            }
-        }
-        Map<String, Integer> ranking = new LinkedHashMap<>();
-        contagem.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(limite)
-                .forEach(e -> ranking.put(e.getKey(), e.getValue()));
-        return ranking;
-    }
-
-    public List<Produto> getProdutos() { return produtos; }
-    public void setProdutos(List<Produto> produtos) { this.produtos = produtos; }
-
+    /** @return o estoque */
     public Estoque getEstoque() { return estoque; }
+
+    /**
+     * Troca o estoque (usado ao carregar o JSON, pois o Estoque é salvo como
+     * um objeto único).
+     *
+     * @param estoque estoque recuperado
+     */
     public void setEstoque(Estoque estoque) { this.estoque = estoque; }
 
-    public List<Venda> getVendas() { return vendas; }
-    public void setVendas(List<Venda> vendas) { this.vendas = vendas; }
+    /** @return o histórico de vendas */
+    public HistoricoVendas getHistoricoVendas() { return historicoVendas; }
+
+    // Sem setters para catálogo e histórico: são final e recebem os dados
+    // do arquivo pelos seus próprios métodos carregar().
 
     @Override
     public String toString() {
-        return "Lojinha{produtos=" + produtos.size() + ", vendas=" + vendas.size()
-                + ", faturamento=" + String.format("%.2f", faturamentoTotal())
+        return "Lojinha{" + catalogo + ", " + historicoVendas
                 + ", paraRepor=" + produtosParaRepor().size() + "}";
     }
 }
