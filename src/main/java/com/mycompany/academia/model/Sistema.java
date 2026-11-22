@@ -57,7 +57,7 @@ import java.util.Map;
  * novos, apenas recuperados).
  *
  */
-public class Sistemas {
+public class Sistema {
 
     // ===================================================== variáveis de classe
 
@@ -87,7 +87,7 @@ public class Sistemas {
      *
      * @param pastaDados pasta onde ficam os arquivos JSON (ex.: "dados")
      */
-    public Sistema(String pastaDados) {
+    public SistemaString pastaDados) {
         Lojinha lojinha = new Lojinha();
         Catraca catraca = new Catraca();
         this.sessao = new Sessao();
