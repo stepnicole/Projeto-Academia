@@ -87,7 +87,7 @@ public class Sistema {
      *
      * @param pastaDados pasta onde ficam os arquivos JSON (ex.: "dados")
      */
-    public SistemaString pastaDados) {
+    public Sistema(String pastaDados) {
         Lojinha lojinha = new Lojinha();
         Catraca catraca = new Catraca();
         this.sessao = new Sessao();
