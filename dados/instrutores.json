@@ -2,11 +2,31 @@
   {
     "especialidade": "SPINNING",
     "salario": 2500.0,
-    "id": 4,
+    "id": 1,
     "nome": "Marcos",
-    "endereco": "Rua D",
-    "telefone": "3866666-0000",
+    "endereco": "Rua F",
+    "telefone": "38 94444-0000",
     "email": "marcos@email.com",
-    "cpfAnonimizado": "xxx.321.xxx-09"
+    "cpfAnonimizado": "xxx.333.xxx-55"
+  },
+  {
+    "especialidade": "MUSCULACAO",
+    "salario": 2500.0,
+    "id": 2,
+    "nome": "Lu",
+    "endereco": "Rua G",
+    "telefone": "38 93333-0000",
+    "email": "lu@email.com",
+    "cpfAnonimizado": "xxx.777.xxx-99"
+  },
+  {
+    "especialidade": "PILATES",
+    "salario": 2300.0,
+    "id": 3,
+    "nome": "Rita",
+    "endereco": "Rua H",
+    "telefone": "38 92222-0000",
+    "email": "rita@email.com",
+    "cpfAnonimizado": "xxx.888.xxx-00"
   }
 ]

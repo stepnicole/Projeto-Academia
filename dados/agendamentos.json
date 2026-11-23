@@ -4,23 +4,47 @@
     "idCliente": 1,
     "idAula": 1,
     "datas": [
-      "2026-10-30"
+      "2026-11-20"
     ],
     "preco": 80.0,
     "tipo": "DIARIA",
-    "status": "CANCELADO",
-    "dataCriacao": "2026-10-11"
+    "status": "REALIZADO",
+    "dataCriacao": "2026-11-03"
   },
   {
     "id": 2,
-    "idCliente": 1,
-    "idAula": 1,
+    "idCliente": 2,
+    "idAula": 2,
     "datas": [
-      "2026-10-30"
+      "2026-11-16"
     ],
-    "preco": 80.0,
+    "preco": 250.0,
+    "tipo": "MENSALIDADE",
+    "status": "CONFIRMADO",
+    "dataCriacao": "2026-11-03"
+  },
+  {
+    "id": 3,
+    "idCliente": 50,
+    "idAula": 3,
+    "datas": [
+      "2026-11-20"
+    ],
+    "preco": 90.0,
     "tipo": "DIARIA",
     "status": "CANCELADO",
-    "dataCriacao": "2026-10-11"
+    "dataCriacao": "2026-11-03"
+  },
+  {
+    "id": 4,
+    "idCliente": 1,
+    "idAula": 3,
+    "datas": [
+      "2026-11-20"
+    ],
+    "preco": 90.0,
+    "tipo": "DIARIA",
+    "status": "CANCELADO",
+    "dataCriacao": "2026-11-03"
   }
 ]

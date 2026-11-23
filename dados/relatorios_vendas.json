@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "periodo": "Dia 05/11/2026",
+    "inicio": "2026-11-05",
+    "fim": "2026-11-05",
+    "qtdDiarias": 1,
+    "totalDiarias": 80.0,
+    "qtdMensalidades": 1,
+    "totalMensalidades": 250.0,
+    "qtdVendasLojinha": 0,
+    "totalLojinha": 0.0,
+    "qtdReembolsos": 0,
+    "totalReembolsos": 0.0
+  },
+  {
+    "id": 2,
+    "periodo": "Mês 11/2026",
+    "inicio": "2026-11-01",
+    "fim": "2026-11-30",
+    "qtdDiarias": 2,
+    "totalDiarias": 170.0,
+    "qtdMensalidades": 1,
+    "totalMensalidades": 250.0,
+    "qtdVendasLojinha": 2,
+    "totalLojinha": 107.5,
+    "qtdReembolsos": 1,
+    "totalReembolsos": 45.0
+  }
+]

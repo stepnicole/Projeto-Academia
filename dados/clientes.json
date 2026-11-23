@@ -2,13 +2,132 @@
   {
     "cartaoCredito": "1234567812345678",
     "idsAgendamentos": [
-      10
+      1,
+      4
+    ],
+    "extratos": [
+      {
+        "id": 1,
+        "idCliente": 1,
+        "nomeCliente": "Ana Turista",
+        "cpfCliente": "xxx.123.xxx-45",
+        "dataHora": "2026-11-05T00:00",
+        "tipo": "AGENDAMENTO",
+        "linhas": [
+          "Diária - Spinning (Sala de Spinning)",
+          "Agendamento nº 1 - data(s): 20/11/2026",
+          "Instrutor(a): Marcos",
+          "Cobrado no cartão ****5678: R$ 80,00"
+        ],
+        "valorTotal": 80.0
+      },
+      {
+        "id": 5,
+        "idCliente": 1,
+        "nomeCliente": "Ana Turista",
+        "cpfCliente": "xxx.123.xxx-45",
+        "dataHora": "2026-11-20T09:30",
+        "tipo": "LOJINHA",
+        "linhas": [
+          "Venda nº 1",
+          "  2x Água 500ml (R$ 3,00) \u003d R$ 6,00",
+          "  1x Barra de proteína (R$ 8,50) \u003d R$ 8,50"
+        ],
+        "valorTotal": 14.5
+      }
     ],
     "id": 1,
-    "nome": "Ana",
-    "endereco": "Rua A",
-    "telefone": "3899999-0000",
+    "nome": "Ana Turista",
+    "endereco": "Rua A, 1 - BH",
+    "telefone": "31 98888-1111",
     "email": "ana@email.com",
     "cpfAnonimizado": "xxx.123.xxx-45"
+  },
+  {
+    "cartaoCredito": "8765432187654321",
+    "idsAgendamentos": [
+      2
+    ],
+    "extratos": [
+      {
+        "id": 2,
+        "idCliente": 2,
+        "nomeCliente": "Pedro Mensalista",
+        "cpfCliente": "xxx.321.xxx-09",
+        "dataHora": "2026-11-05T00:00",
+        "tipo": "AGENDAMENTO",
+        "linhas": [
+          "Mensalidade - Musculação (Sala de Musculação)",
+          "Agendamento nº 2 - data(s): 16/11/2026",
+          "Instrutor(a): Lu",
+          "Cobrado no cartão ****4321: R$ 250,00"
+        ],
+        "valorTotal": 250.0
+      },
+      {
+        "id": 6,
+        "idCliente": 2,
+        "nomeCliente": "Pedro Mensalista",
+        "cpfCliente": "xxx.321.xxx-09",
+        "dataHora": "2026-11-17T08:15",
+        "tipo": "LOJINHA",
+        "linhas": [
+          "Venda nº 2",
+          "  2x Luva de treino (R$ 45,00) \u003d R$ 90,00",
+          "  1x Água 500ml (R$ 3,00) \u003d R$ 3,00"
+        ],
+        "valorTotal": 93.0
+      }
+    ],
+    "id": 2,
+    "nome": "Pedro Mensalista",
+    "endereco": "Rua D, 4 - Milho Verde",
+    "telefone": "38 96666-0000",
+    "email": "pedro@email.com",
+    "cpfAnonimizado": "xxx.321.xxx-09"
+  },
+  {
+    "cartaoCredito": "1111222233334444",
+    "idsAgendamentos": [
+      3
+    ],
+    "extratos": [
+      {
+        "id": 3,
+        "idCliente": 50,
+        "nomeCliente": "Carla Viajante",
+        "cpfCliente": "xxx.456.xxx-78",
+        "dataHora": "2026-11-06T00:00",
+        "tipo": "AGENDAMENTO",
+        "linhas": [
+          "Diária - Pilates (Sala de Pilates)",
+          "Agendamento nº 3 - data(s): 20/11/2026",
+          "Instrutor(a): Rita",
+          "Cobrado no cartão ****4444: R$ 90,00"
+        ],
+        "valorTotal": 90.0
+      },
+      {
+        "id": 4,
+        "idCliente": 50,
+        "nomeCliente": "Carla Viajante",
+        "cpfCliente": "xxx.456.xxx-78",
+        "dataHora": "2026-11-10T00:00",
+        "tipo": "REEMBOLSO",
+        "linhas": [
+          "Cancelamento do agendamento nº 3",
+          "Valor pago:            R$ 90,00",
+          "Retido pela academia:  R$ 45,00",
+          "Devolvido no cartão ****4444: R$ 45,00"
+        ],
+        "valorTotal": -45.0
+      }
+    ],
+    "id": 50,
+    "nome": "Carla Viajante",
+    "endereco": "Av. E, 5 - SP",
+    "telefone": "11 95555-0000",
+    "email": "carla@email.com",
+    "cpfAnonimizado": "xxx.456.xxx-78"
   }
 ]

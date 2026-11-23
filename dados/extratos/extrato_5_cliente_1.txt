@@ -1,0 +1,11 @@
+========== GYM CORN - MILHO VERDE ==========
+Extrato nº 5 - Compra na lojinha/lanchonete
+Data: 20/11/2026 09:30
+Cliente: Ana Turista (id 1, CPF xxx.123.xxx-45)
+------------------------------------------
+Venda nº 1
+  2x Água 500ml (R$ 3,00) = R$ 6,00
+  1x Barra de proteína (R$ 8,50) = R$ 8,50
+------------------------------------------
+TOTAL: R$ 14,50
+==========================================

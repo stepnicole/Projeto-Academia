@@ -3,8 +3,24 @@
     "id": 1,
     "tipoAula": "SPINNING",
     "idSala": 1,
-    "idInstrutor": 4,
-    "dataHora": "2026-10-20T08:00",
-    "vagasOcupadas": 14
+    "idInstrutor": 1,
+    "dataHora": "2026-11-20T08:00",
+    "vagasOcupadas": 1
+  },
+  {
+    "id": 2,
+    "tipoAula": "MUSCULACAO",
+    "idSala": 2,
+    "idInstrutor": 2,
+    "dataHora": "2026-11-16T07:00",
+    "vagasOcupadas": 1
+  },
+  {
+    "id": 3,
+    "tipoAula": "PILATES",
+    "idSala": 4,
+    "idInstrutor": 3,
+    "dataHora": "2026-11-20T18:00",
+    "vagasOcupadas": 0
   }
 ]

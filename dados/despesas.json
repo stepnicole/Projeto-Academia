@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "descricao": "Produtos de limpeza",
+    "categoria": "LIMPEZA",
+    "valor": 400.0,
+    "data": "2026-11-02"
+  },
+  {
+    "id": 2,
+    "descricao": "Toalhas e álcool",
+    "categoria": "MATERIAL",
+    "valor": 180.0,
+    "data": "2026-11-09"
+  },
+  {
+    "id": 3,
+    "descricao": "Conta de luz",
+    "categoria": "CONTAS",
+    "valor": 620.0,
+    "data": "2026-11-10"
+  },
+  {
+    "id": 4,
+    "descricao": "Salário Stephanie Nicole (Administrador)",
+    "categoria": "SALARIOS",
+    "valor": 8000.0,
+    "data": "2026-11-30"
+  },
+  {
+    "id": 5,
+    "descricao": "Salário Maria Augusta (Recepcionista)",
+    "categoria": "SALARIOS",
+    "valor": 2400.0,
+    "data": "2026-11-30"
+  },
+  {
+    "id": 6,
+    "descricao": "Salário Bia Souza (Atendente da lojinha)",
+    "categoria": "SALARIOS",
+    "valor": 1800.0,
+    "data": "2026-11-30"
+  },
+  {
+    "id": 7,
+    "descricao": "Salário instrutor(a) Marcos",
+    "categoria": "SALARIOS",
+    "valor": 2500.0,
+    "data": "2026-11-30"
+  },
+  {
+    "id": 8,
+    "descricao": "Salário instrutor(a) Lu",
+    "categoria": "SALARIOS",
+    "valor": 2500.0,
+    "data": "2026-11-30"
+  },
+  {
+    "id": 9,
+    "descricao": "Salário instrutor(a) Rita",
+    "categoria": "SALARIOS",
+    "valor": 2300.0,
+    "data": "2026-11-30"
+  }
+]

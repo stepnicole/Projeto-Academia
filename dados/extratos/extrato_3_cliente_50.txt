@@ -1,0 +1,12 @@
+========== GYM CORN - MILHO VERDE ==========
+Extrato nº 3 - Diária/Mensalidade
+Data: 06/11/2026 00:00
+Cliente: Carla Viajante (id 50, CPF xxx.456.xxx-78)
+------------------------------------------
+Diária - Pilates (Sala de Pilates)
+Agendamento nº 3 - data(s): 20/11/2026
+Instrutor(a): Rita
+Cobrado no cartão ****4444: R$ 90,00
+------------------------------------------
+TOTAL: R$ 90,00
+==========================================

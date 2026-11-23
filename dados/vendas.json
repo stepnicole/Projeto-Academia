@@ -1,0 +1,40 @@
+[
+  {
+    "id": 1,
+    "idCliente": 1,
+    "dataHora": "2026-11-20T09:30",
+    "itens": [
+      {
+        "idProduto": 1,
+        "nomeProduto": "Água 500ml",
+        "quantidade": 2,
+        "precoUnitario": 3.0
+      },
+      {
+        "idProduto": 2,
+        "nomeProduto": "Barra de proteína",
+        "quantidade": 1,
+        "precoUnitario": 8.5
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "idCliente": 2,
+    "dataHora": "2026-11-17T08:15",
+    "itens": [
+      {
+        "idProduto": 3,
+        "nomeProduto": "Luva de treino",
+        "quantidade": 2,
+        "precoUnitario": 45.0
+      },
+      {
+        "idProduto": 1,
+        "nomeProduto": "Água 500ml",
+        "quantidade": 1,
+        "precoUnitario": 3.0
+      }
+    ]
+  }
+]

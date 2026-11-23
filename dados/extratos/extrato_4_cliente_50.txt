@@ -1,0 +1,12 @@
+========== GYM CORN - MILHO VERDE ==========
+Extrato nº 4 - Reembolso de cancelamento
+Data: 10/11/2026 00:00
+Cliente: Carla Viajante (id 50, CPF xxx.456.xxx-78)
+------------------------------------------
+Cancelamento do agendamento nº 3
+Valor pago:            R$ 90,00
+Retido pela academia:  R$ 45,00
+Devolvido no cartão ****4444: R$ 45,00
+------------------------------------------
+TOTAL: R$ -45,00
+==========================================

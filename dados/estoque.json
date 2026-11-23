@@ -1,0 +1,24 @@
+{
+  "itens": [
+    {
+      "idProduto": 1,
+      "quantidade": 47,
+      "quantidadeMinima": 10
+    },
+    {
+      "idProduto": 2,
+      "quantidade": 11,
+      "quantidadeMinima": 5
+    },
+    {
+      "idProduto": 3,
+      "quantidade": 11,
+      "quantidadeMinima": 2
+    },
+    {
+      "idProduto": 4,
+      "quantidade": 10,
+      "quantidadeMinima": 3
+    }
+  ]
+}

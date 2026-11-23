@@ -1,16 +1,30 @@
 [
   {
     "id": 1,
-    "idAgendamento": 3,
+    "idAgendamento": 1,
     "valor": 80.0,
-    "data": "2026-10-20",
+    "data": "2026-11-05",
     "tipo": "COBRANCA"
   },
   {
     "id": 2,
+    "idAgendamento": 2,
+    "valor": 250.0,
+    "data": "2026-11-05",
+    "tipo": "COBRANCA"
+  },
+  {
+    "id": 3,
     "idAgendamento": 3,
-    "valor": 40.0,
-    "data": "2026-10-25",
+    "valor": 90.0,
+    "data": "2026-11-06",
+    "tipo": "COBRANCA"
+  },
+  {
+    "id": 4,
+    "idAgendamento": 3,
+    "valor": 45.0,
+    "data": "2026-11-10",
     "tipo": "REEMBOLSO"
   }
 ]

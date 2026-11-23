@@ -1,0 +1,12 @@
+========== GYM CORN - MILHO VERDE ==========
+Extrato nº 2 - Diária/Mensalidade
+Data: 05/11/2026 00:00
+Cliente: Pedro Mensalista (id 2, CPF xxx.321.xxx-09)
+------------------------------------------
+Mensalidade - Musculação (Sala de Musculação)
+Agendamento nº 2 - data(s): 16/11/2026
+Instrutor(a): Lu
+Cobrado no cartão ****4321: R$ 250,00
+------------------------------------------
+TOTAL: R$ 250,00
+==========================================

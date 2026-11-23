@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "nome": "Água 500ml",
+    "descricao": "Sem gás",
+    "categoria": "LANCHONETE",
+    "preco": 3.0
+  },
+  {
+    "id": 2,
+    "nome": "Barra de proteína",
+    "descricao": "Chocolate",
+    "categoria": "LANCHONETE",
+    "preco": 8.5
+  },
+  {
+    "id": 3,
+    "nome": "Luva de treino",
+    "descricao": "Tamanho M",
+    "categoria": "LOJA",
+    "preco": 45.0
+  },
+  {
+    "id": 4,
+    "nome": "Garrafa 1L",
+    "descricao": "Logo da academia",
+    "categoria": "LOJA",
+    "preco": 35.0
+  }
+]

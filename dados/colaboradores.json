@@ -1,0 +1,26 @@
+[
+  {
+    "login": "maria",
+    "senhaHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "salario": 2400.0,
+    "cargo": "Recepcionista",
+    "id": 2,
+    "nome": "Maria Augusta",
+    "endereco": "Rua B, 22",
+    "telefone": "38 98888-0002",
+    "email": "maria-augusta@gymcorn.com",
+    "cpfAnonimizado": "xxx.654.xxx-00"
+  },
+  {
+    "login": "bia",
+    "senhaHash": "055f4e0d81f16ce93d8551976f177dc01fa7956d98a909c150bf23519f1b1b40",
+    "salario": 1800.0,
+    "cargo": "Atendente da lojinha",
+    "id": 3,
+    "nome": "Bia Souza",
+    "endereco": "Rua C, 30",
+    "telefone": "38 97777-0003",
+    "email": "bia@gymcorn.com",
+    "cpfAnonimizado": "xxx.222.xxx-44"
+  }
+]

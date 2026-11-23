@@ -1,0 +1,12 @@
+========== GYM CORN - MILHO VERDE ==========
+Extrato nº 1 - Diária/Mensalidade
+Data: 05/11/2026 00:00
+Cliente: Ana Turista (id 1, CPF xxx.123.xxx-45)
+------------------------------------------
+Diária - Spinning (Sala de Spinning)
+Agendamento nº 1 - data(s): 20/11/2026
+Instrutor(a): Marcos
+Cobrado no cartão ****5678: R$ 80,00
+------------------------------------------
+TOTAL: R$ 80,00
+==========================================
