@@ -50,7 +50,7 @@ import java.util.Map;
  * As datas são fixas (novembro de 2026) para que o resultado seja sempre o
  * mesmo, independente do dia em que o programa for executado.
  *
- * @author Ste
+ * @author Stephanie
  */
 public class Academia {
 
@@ -89,7 +89,7 @@ public class Academia {
         } catch (AcessoNegadoExcecao e) {
             System.out.println("Sem login: " + e.getMessage());
         }
-        System.out.println("Login com senha errada: " + sistema.login("Stephanie", "errada"));
+        System.out.println("Login com senha errada: " + sistema.login("stephanie", "errada"));
         System.out.println("Login correto: " + sistema.login("stephanie", "admin123"));
         System.out.println("Usuário logado: " + sistema.getSessao().getUsuarioLogado().getNome());
 
@@ -196,8 +196,8 @@ public class Academia {
 
         System.out.println("\n-- Cancelamento da Carla (retém 50%) --");
         double devolvido = agenda.cancelar(agCarla.getId(), LocalDate.of(2026, 11, 10));
-        System.out.println("Devolvido para Carla: R$ " + devolvido);
-        System.out.println("Cancelar de novo: R$ " + agenda.cancelar(agCarla.getId(), LocalDate.of(2026, 11, 10)));
+        System.out.println("Devolvido para Carla: R$ " + String.format("%.2f", devolvido));
+        System.out.println("Cancelar de novo: R$ " + String.format("%.2f", agenda.cancelar(agCarla.getId(), LocalDate.of(2026, 11, 10))));
 
         System.out.println("\n-- Expiração de preliminares não confirmados --");
         System.out.println("Expirados em 16/11: " + agenda.expirarPendentes(LocalDate.of(2026, 11, 16)));
@@ -286,7 +286,7 @@ public class Academia {
                 + agenda.concluirRealizados(LocalDate.of(2026, 11, 21)));
         System.out.println(agAna);
         System.out.println("Cancelar agendamento realizado devolve: R$ "
-                + agenda.cancelar(agAna.getId(), LocalDate.of(2026, 11, 21)) + " (status " + agAna.getStatus() + ")");
+                + String.format("%.2f", agenda.cancelar(agAna.getId(), LocalDate.of(2026, 11, 21))) + " (status " + agAna.getStatus() + ")");
         System.out.println("Mensalidade do Pedro vale até " + agPedro.getUltimaData()
                 + ", status: " + agPedro.getStatus());
 
@@ -368,7 +368,7 @@ public class Academia {
         Agendamento agRecuperado = recuperado.getControleAgendamentos().buscar(agAna.getId());
         System.out.println("Estado recriado do JSON pela EstadoFactory: " + agRecuperado.getStatus()
                 + " | tentar confirmar de novo: " + agRecuperado.confirmar(LocalDate.of(2026, 11, 21)));
-        System.out.println("Helena continua administradora? "
+        System.out.println("Stephanie continua administradora? "
                 + recuperado.getCadastroColaboradores().buscar(dona.getId()).podeGerenciarFinanceiro());
         System.out.println("Contadores após carregar (não mudam): " + Sistema.contarInstancias());
     }
