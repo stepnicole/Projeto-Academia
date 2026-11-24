@@ -45,4 +45,8 @@ public class Confirmado implements EstadoAgendamento {
         ag.setEstado(new Realizado());
         return true;
     }
+    @Override
+    public String toString() {
+        return "Confirmado{pago, aguardando a aula}";
+    }
 }

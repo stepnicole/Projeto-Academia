@@ -45,4 +45,9 @@ public class Preliminar implements EstadoAgendamento {
     public boolean concluir(Agendamento ag, LocalDate hoje) {
         return false; // sem confirmação não há aula a concluir
     }
+
+    @Override
+    public String toString() {
+        return "Preliminar{aguardando confirmação}";
+    }
 }

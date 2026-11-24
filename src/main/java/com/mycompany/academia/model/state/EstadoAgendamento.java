@@ -21,4 +21,5 @@ public interface EstadoAgendamento {
     boolean expirar(Agendamento ag, LocalDate hoje);
 
     boolean concluir(Agendamento ag, LocalDate hoje);
+    
 }

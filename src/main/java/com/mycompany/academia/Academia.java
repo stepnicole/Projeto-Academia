@@ -25,10 +25,12 @@ import com.mycompany.academia.model.Despesa;
 import com.mycompany.academia.model.Extrato;
 import com.mycompany.academia.model.Instrutor;
 import com.mycompany.academia.model.Persistencia;
+import com.mycompany.academia.model.Pessoa;
 import com.mycompany.academia.model.Sala;
 import com.mycompany.academia.model.Sistema;
 import com.mycompany.academia.model.enums.CategoriaDespesa;
 import com.mycompany.academia.model.enums.CategoriaProduto;
+import com.mycompany.academia.model.enums.StatusAgendamento;
 import com.mycompany.academia.model.enums.TipoAcesso;
 import com.mycompany.academia.model.enums.TipoAgendamento;
 import com.mycompany.academia.model.enums.TipoAula;
@@ -36,6 +38,7 @@ import com.mycompany.academia.model.lojinha.EstoqueInsuficienteExcecao;
 import com.mycompany.academia.model.lojinha.Lojinha;
 import com.mycompany.academia.model.lojinha.Produto;
 import com.mycompany.academia.model.lojinha.Venda;
+import com.mycompany.academia.model.state.EstadoFactory;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -54,7 +57,9 @@ import java.util.Map;
  */
 public class Academia {
 
-    /** Construtor privado: a classe só tem o método main. */
+    /**
+     * Construtor privado: a classe só tem o método main.
+     */
     private Academia() {
     }
 
@@ -371,10 +376,52 @@ public class Academia {
         System.out.println("Stephanie continua administradora? "
                 + recuperado.getCadastroColaboradores().buscar(dona.getId()).podeGerenciarFinanceiro());
         System.out.println("Contadores após carregar (não mudam): " + Sistema.contarInstancias());
+
+        // ------------------------------------------------------------------
+        // Chamadas diretas de funções que nas seções anteriores só eram
+        // usadas por dentro de outras (item "testar todas as funções").
+        titulo("13. OUTRAS FUNÇÕES");
+        System.out.println("Alguém logado? " + recuperado.getSessao().estaLogado()
+                + " (" + recuperado.getSessao().getUsuarioLogado().getNome() + ")");
+        System.out.println("Sala 2: " + Sala.buscarPorId(2));
+        System.out.println("Sala de pilates: " + Sala.buscarPorTipo(TipoAula.PILATES));
+        System.out.println("CPF anonimizado: " + Pessoa.anonimizarCpf("123.456.789-01"));
+        System.out.println("Estado criado pela factory: " + EstadoFactory.fromStatus(StatusAgendamento.CONFIRMADO));
+
+        Agendamento simulacao = new Agendamento(99, ana.getId(), pilates.getId(),
+                List.of(LocalDate.of(2026, 12, 20)), 100.0, TipoAgendamento.DIARIA, LocalDate.of(2026, 12, 1));
+        simulacao.confirmar(LocalDate.of(2026, 12, 2));
+        System.out.println("Reembolso se cancelar em 10/12: R$ "
+                + String.format("%.2f", simulacao.calcularReembolso(LocalDate.of(2026, 12, 10))));
+        System.out.println("Reembolso se cancelar em 19/12: R$ "
+                + String.format("%.2f", simulacao.calcularReembolso(LocalDate.of(2026, 12, 19))));
+        System.out.println("Cobre 20/12? " + simulacao.cobreData(LocalDate.of(2026, 12, 20))
+                + " | cobre 21/12? " + simulacao.cobreData(LocalDate.of(2026, 12, 21)));
+
+        System.out.println("Ana antes: agendamentos " + ana.getIdsAgendamentos()
+                + " | remove o 4 (cancelado): " + ana.removerAgendamento(4)
+                + " | depois: " + ana.getIdsAgendamentos());
+
+        Lojinha lojaRec = recuperado.getControleLojinha().getLojinha();
+        System.out.println("Remover produto Garrafa: " + lojaRec.removerProduto(garrafa.getId()));
+        System.out.println("Remover produto inexistente: " + lojaRec.removerProduto(99));
+        System.out.println("Produtos restantes: " + lojaRec.getCatalogo().getProdutos());
+        System.out.println("Faturamento total da lojinha: R$ "
+                + String.format("%.2f", lojaRec.getHistoricoVendas().faturamentoTotal()));
+
+        recuperado.logout();
+        System.out.println("Depois do logout, alguém logado? " + recuperado.getSessao().estaLogado());
     }
 
-    /** Lista só os nomes, para a saída ficar curta. */
+    /**
+     * Lista só os nomes, para a saída ficar curta.
+     */
     private static List<String> nomes(List<Cliente> clientes) {
         return clientes.stream().map(Cliente::getNome).toList();
+    }
+
+    @Override
+    public String toString() {
+        return "Academia{classe principal do sistema GYM CORN - Milho Verde}";
     }
 }

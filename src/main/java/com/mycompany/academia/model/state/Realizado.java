@@ -36,4 +36,8 @@ public class Realizado implements EstadoAgendamento {
     public boolean concluir(Agendamento ag, LocalDate hoje) {
         return false; // já realizado
     }
+    @Override
+    public String toString() {
+        return "Realizado{aula já aconteceu}";
+    }
 }

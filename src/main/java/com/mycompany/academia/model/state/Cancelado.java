@@ -1,4 +1,4 @@
-package com.mycompany.academia.model.state;
+ package com.mycompany.academia.model.state;
 
 import com.mycompany.academia.model.Agendamento;
 import com.mycompany.academia.model.enums.StatusAgendamento;
@@ -35,5 +35,9 @@ public class Cancelado implements EstadoAgendamento {
     @Override
     public boolean concluir(Agendamento ag, LocalDate hoje) {
         return false;
+    }
+    @Override
+    public String toString() {
+        return "Cancelado{estado final}";
     }
 }
