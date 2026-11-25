@@ -55,8 +55,9 @@ import java.util.Iterator;
  * Classe principal: testa, em ordem, todas as funcionalidades do sistema da
  * academia (cada seção corresponde a um caso de uso do trabalho).
  * <p>
- * As datas são fixas (novembro de 2026) para que o resultado seja sempre o
- * mesmo, independente do dia em que o programa for executado.
+ * As datas são fixas (novembro de 2026 nas seções 1 a 16 e dezembro de 2026 no
+ * cenário com 10 clientes) para que o resultado seja sempre o mesmo,
+ * independente do dia em que o programa for executado.
  *
  * @author Stephanie
  */
@@ -416,13 +417,10 @@ public class Academia {
 
         recuperado.logout();
         System.out.println("Depois do logout, alguém logado? " + recuperado.getSessao().estaLogado());
-        
-        
-        // ==================================================================
-        // Questão 18
-        // ==================================================================
+
+        // ------------------------------------------------------------------
         {
-            titulo("QUESTÃO 18 - ITERATOR E FOREACH");
+            titulo("14. ITERATOR E FOREACH");
             // O ArrayList implementa a interface Iterable, então sabe criar um
             // Iterator: um objeto que "aponta" para a posição atual da lista.
             // hasNext() pergunta se ainda há elemento; next() devolve o
@@ -442,9 +440,8 @@ public class Academia {
                 imprimir(c);
             }
 
-            // Diferença prática: com o Iterator dá para remover com segurança
-            // durante o percurso; no foreach, remover da lista lança
-            // ConcurrentModificationException.
+            // Com o Iterator dá para remover com segurança durante o percurso;
+            // no foreach, remover da lista lança ConcurrentModificationException.
             Iterator<Cliente> it2 = listaClientes.iterator();
             while (it2.hasNext()) {
                 if (it2.next().calcularTotalConta() < 50) {
@@ -452,22 +449,22 @@ public class Academia {
                 }
             }
             System.out.println("Iterator.remove() tirou da cópia quem gastou menos de R$ 50: " + nomes(listaClientes));
+            List<Cliente> outraCopia = new ArrayList<>(clientes.getTodos());
             try {
-                for (Cliente c : listaClientes) {
+                for (Cliente c : outraCopia) {
                     if (c.getNome().startsWith("Ana")) {
-                        listaClientes.remove(c);
+                        outraCopia.remove(c);
                     }
                 }
+                System.out.println("Remover dentro do foreach: não deu erro desta vez");
             } catch (ConcurrentModificationException e) {
                 System.out.println("Remover dentro do foreach: ConcurrentModificationException");
             }
         }
 
-        // ==================================================================
-        // Questão 19
-        // ==================================================================
+        // ------------------------------------------------------------------
         {
-            titulo("QUESTÃO 19 - COMPARATOR E COLLECTIONS.SORT");
+            titulo("15.COMPARATOR E COLLECTIONS.SORT");
             Comparator<Cliente> porNome = new ClientePorNome();
             Comparator<Cliente> porGasto = new ClientePorTotalGasto();
             System.out.println("porNome.compare(Ana, Pedro)  = " + porNome.compare(ana, pedro) + " (negativo: Ana vem antes)");
@@ -500,11 +497,9 @@ public class Academia {
             }
         }
 
-        // ==================================================================
-        // Questão 20
-        // ==================================================================
+        // ------------------------------------------------------------------
         {
-            titulo("QUESTÃO 20 - ENCONTRAR (ITERATOR + COMPARATOR) x BINARYSEARCH");
+            titulo("16. ENCONTRAR(ITERATOR + COMPARATOR) x BINARYSEARCH");
             Comparator<Cliente> porNome = new ClientePorNome();
             Comparator<Cliente> porId = new ClientePorId();
             // A chave é um Cliente "modelo" só com o campo procurado preenchido.
@@ -536,33 +531,33 @@ public class Academia {
             System.out.println("  binarySearch(): divide a lista ao meio a cada passo (O(log n)), mas exige a lista");
             System.out.println("               ordenada pelo mesmo critério e devolve a POSIÇÃO (negativa se não achar).");
         }
-
-        // ==================================================================
-        // Questão 21
-        // ==================================================================
+        // ------------------------------------------------------------------
         cenarioDezClientes();
     }
 
-        /** Imprime um objeto com recuo (usado nos testes do Iterator). */
+    /**
+     * Imprime um objeto com recuo (usado nos testes do Iterator).
+     */
     private static void imprimir(Object objeto) {
         System.out.println("  " + objeto);
     }
 
-    /** Imprime o título de uma etapa do cenário da Questão 21. */
+    /**
+     * Imprime o título de uma etapa do cenário com 10 clientes.
+     */
     private static void etapa(String texto) {
         System.out.println("\n--- " + texto + " ---");
     }
 
     /**
-     * Questão 21: atendimento de 10 clientes, cada um com um caminho
-     * diferente, do cadastro até a nota fiscal ou o cancelamento da
-     * matrícula. Usa um sistema separado (pasta "dados_cenario") e datas de
-     * dezembro de 2026.
+     * Atendimento de 10 clientes, cada um com um caminho diferente, do cadastro
+     * até a nota fiscal ou o cancelamento da matrícula. Usa um sistema separado
+     * (pasta "dados_cenario") e datas de dezembro de 2026.
      *
      * @throws IOException se houver erro ao salvar os dados do cenário
      */
     private static void cenarioDezClientes() throws IOException {
-        titulo("QUESTÃO 21 - CENÁRIO COM 10 CLIENTES");
+        titulo("17.CENÁRIO COM 10 CLIENTES");
         Sistema s = new Sistema("dados_cenario");
         CadastroColaboradores colabs = s.getCadastroColaboradores();
         CadastroClientes clientes = s.getCadastroClientes();
@@ -695,8 +690,8 @@ public class Academia {
         }
         System.out.println("Produtos para repor: " + lojaCtrl.getLojinha().produtosParaRepor());
         System.out.println("Reposição de 10 luvas: " + lojaCtrl.getLojinha().reporEstoque(luva.getId(), 10));
-        lojaCtrl.registrarVenda(diego.getId(), Map.of(luva.getId(), 1), LocalDateTime.of(2026, 12, 21, 9, 20));
-        lojaCtrl.registrarVenda(lucas.getId(), Map.of(agua.getId(), 2), LocalDateTime.of(2026, 12, 21, 9, 15));
+        lojaCtrl.registrarVenda(diego.getId(), Map.of(luva.getId(), 1), LocalDateTime.of(2026, 12, 21, 9, 15));
+        lojaCtrl.registrarVenda(lucas.getId(), Map.of(agua.getId(), 2), LocalDateTime.of(2026, 12, 21, 9, 20));
         System.out.println("Estoque de luvas: " + lojaCtrl.verificarProduto(luva.getId()));
         System.out.println("Mais vendidos: " + lojaCtrl.getLojinha().getHistoricoVendas().produtosMaisVendidos(3));
 
@@ -730,7 +725,6 @@ public class Academia {
         System.out.println("Cenário salvo em 'dados_cenario/'.");
     }
 
-    
     /**
      * Lista só os nomes, para a saída ficar curta.
      */
