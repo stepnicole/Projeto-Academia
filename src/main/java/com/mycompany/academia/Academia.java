@@ -87,7 +87,7 @@ public class Academia {
         // ------------------------------------------------------------------
         titulo("1. AUTENTICAÇÃO");
         Administrador dona = colabs.criarAdministradorInicial("Stephanie Nicole", "Rua Principal, 10",
-                "38 99999-0001", "Ste@gymcorn.com", "123.456.789-01", "stephanie", "admin123", 8000);
+                "38 99999-0001", "ste@gymcorn.com", "123.456.789-01", "stephanie", "admin123", 8000);
         System.out.println("Administrador inicial: " + dona);
         try {
             clientes.cadastrar("Teste", "-", "-", "-", "000.000.000-00", "0000");
@@ -379,7 +379,7 @@ public class Academia {
 
         // ------------------------------------------------------------------
         // Chamadas diretas de funções que nas seções anteriores só eram
-        // usadas por dentro de outras (item "testar todas as funções").
+        // usadas por dentro de outras.
         titulo("13. OUTRAS FUNÇÕES");
         System.out.println("Alguém logado? " + recuperado.getSessao().estaLogado()
                 + " (" + recuperado.getSessao().getUsuarioLogado().getNome() + ")");
