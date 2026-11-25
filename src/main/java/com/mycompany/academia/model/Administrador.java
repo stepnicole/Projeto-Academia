@@ -16,7 +16,7 @@ public class Administrador extends Colaborador {
      * @param email          e-mail
      * @param cpfAnonimizado CPF pseudo-anonimizado
      * @param login          login
-     * @param senha          senha em texto puro (vira hash)
+     * @param senha          senha de acesso
      * @param salario        pró-labore/salário
      */
     public Administrador(int id, String nome, String endereco, String telefone,

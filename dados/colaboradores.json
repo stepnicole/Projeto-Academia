@@ -1,7 +1,7 @@
 [
   {
     "login": "maria",
-    "senhaHash": "03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
+    "senha": "1234",
     "salario": 2400.0,
     "cargo": "Recepcionista",
     "id": 2,
@@ -13,7 +13,7 @@
   },
   {
     "login": "bia",
-    "senhaHash": "055f4e0d81f16ce93d8551976f177dc01fa7956d98a909c150bf23519f1b1b40",
+    "senha": "nova123",
     "salario": 1800.0,
     "cargo": "Atendente da lojinha",
     "id": 3,
