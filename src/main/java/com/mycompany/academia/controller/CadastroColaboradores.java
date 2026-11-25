@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Cadastro de funcionários</b> (colaboradores e
+ * Cadastro de <b>funcionários</b> (colaboradores e
  * administradores) e troca de senhas.
  * <p>
  * Administradores ficam numa lista separada porque o Gson não guarda a
@@ -18,6 +18,7 @@ import java.util.List;
  *
  * @author Ste
  */
+
 public class CadastroColaboradores {
 
     private final Sessao sessao;
