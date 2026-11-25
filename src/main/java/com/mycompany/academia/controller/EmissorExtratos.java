@@ -93,6 +93,9 @@ public class EmissorExtratos {
         sb.append(String.format("Cliente: %s (id %d)%n", cliente.getNome(), cliente.getId()));
         sb.append(String.format("CPF: %s   Cartão: %s%n", cliente.getCpfAnonimizado(), cliente.getCartaoMascarado()));
         sb.append("------------------------------------------------\n");
+                if (cliente.getExtratos().isEmpty()) {
+            sb.append("(nenhum lançamento no período)\n");
+        }
         for (Extrato e : cliente.getExtratos()) {
             sb.append(String.format("%s  %-28s R$ %8.2f%n",
                     e.getDataHora().toLocalDate().format(DATA_BR), e.getTipo(), e.getValorTotal()));
