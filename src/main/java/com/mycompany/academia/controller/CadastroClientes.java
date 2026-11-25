@@ -5,6 +5,7 @@ import com.mycompany.academia.model.Extrato;
 import com.mycompany.academia.model.Identificador;
 import com.mycompany.academia.model.Pessoa;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -152,6 +153,30 @@ public class CadastroClientes {
         return copia;
     }
 
+        /**
+     * Encontra um cliente percorrendo a lista com um {@link Iterator} e
+     * comparando cada elemento com a chave pelo {@link Comparator} informado.
+     * O cliente é considerado encontrado quando {@code compare} retorna 0.
+     * <p>
+     * É uma busca sequencial: funciona com a lista em qualquer ordem, mas no
+     * pior caso olha todos os elementos.
+     *
+     * @param chave      cliente-modelo com o valor procurado (ex.: só o nome preenchido)
+     * @param comparador critério de comparação (ex.: {@code new ClientePorNome()})
+     * @return o primeiro cliente igual à chave pelo critério, ou null
+     */
+    public Cliente encontrar(Cliente chave, Comparator<Cliente> comparador) {
+        sessao.exigirLogin();
+        Iterator<Cliente> iterator = clientes.iterator();
+        while (iterator.hasNext()) {
+            Cliente atual = iterator.next();
+            if (comparador.compare(atual, chave) == 0) {
+                return atual;
+            }
+        }
+        return null;
+    }
+    
     /** @return texto com os dados de todos os clientes */
     public String imprimirDados() {
         sessao.exigirLogin();

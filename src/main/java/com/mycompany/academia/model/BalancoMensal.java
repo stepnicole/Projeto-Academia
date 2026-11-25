@@ -7,9 +7,9 @@ import java.util.Map;
 
 /**
  * Balanço de receitas e despesas de um mês, com estatísticas básicas.
- * Só o administrador pode gerar (ver {@link com.mycompany.academia.servico.Financeiro#gerarBalancoMensal}).
- *
+ * Só o administrador pode gerar (ver {@link com.mycompany.academia.controller.Financeiro#gerarBalancoMensal}).
  */
+
 public class BalancoMensal {
 
     private int ano;

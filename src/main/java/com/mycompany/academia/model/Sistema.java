@@ -12,7 +12,9 @@ import com.mycompany.academia.controller.EmissorExtratos;
 import com.mycompany.academia.controller.Financeiro;
 import com.mycompany.academia.controller.RepositorioDados;
 import com.mycompany.academia.controller.Sessao;
+import com.mycompany.academia.model.enums.StatusAgendamento;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -81,6 +83,8 @@ public class Sistema {
     private final ControleCatraca controleCatraca;
     private final Financeiro financeiro;
     private final RepositorioDados repositorio;
+    private final EmissorExtratos emissorExtratos;    
+    
 
     /**
      * Monta o sistema e liga os serviços entre si.
@@ -95,13 +99,12 @@ public class Sistema {
         this.cadastroColaboradores = new CadastroColaboradores(sessao);
         this.cadastroAulas = new CadastroAulas(sessao);
         EmissorExtratos extratos = new EmissorExtratos(cadastroClientes, pastaDados + "/extratos");
+        this.emissorExtratos = extratos;
         this.controleAgendamentos = new ControleAgendamentos(sessao, cadastroClientes, cadastroAulas, extratos);
         this.controleLojinha = new ControleLojinha(sessao, lojinha, cadastroClientes, extratos);
         this.controleCatraca = new ControleCatraca(sessao, catraca, cadastroClientes, controleAgendamentos);
-        this.financeiro = new Financeiro(sessao, controleAgendamentos, lojinha, catraca,
-                cadastroColaboradores, cadastroAulas);
-        this.repositorio = new RepositorioDados(pastaDados, cadastroClientes, cadastroColaboradores,
-                cadastroAulas, controleAgendamentos, financeiro, lojinha, catraca);
+        this.financeiro = new Financeiro(sessao, controleAgendamentos, lojinha, catraca,cadastroColaboradores, cadastroAulas);
+        this.repositorio = new RepositorioDados(pastaDados, cadastroClientes, cadastroColaboradores,cadastroAulas, controleAgendamentos, financeiro, lojinha, catraca);
     }
 
     // ===================================================== métodos de classe (static)
@@ -144,7 +147,7 @@ public class Sistema {
     }
 
     /**
-     * Método de classe (item 12): quantas instâncias de Cliente e de Produto
+     * Método de classe: quantas instâncias de Cliente e de Produto
      * foram criadas.
      *
      * @return mapa "Cliente" → quantidade, "Produto" → quantidade
@@ -191,6 +194,48 @@ public class Sistema {
         }
         controleAgendamentos.cancelarPreliminaresDoCliente(idCliente);
         return cadastroClientes.remover(idCliente);
+    }
+    
+        /**
+     * Emite a nota fiscal de fechamento de um cliente, com todos os seus
+     * extratos e o total gasto.
+     *
+     * @param idCliente cliente
+     * @param data      data de emissão
+     * @return texto da nota, ou null se o cliente não existe
+     */
+    public String emitirNotaFiscal(int idCliente, LocalDate data) {
+        sessao.exigirLogin();
+        Cliente c = cadastroClientes.buscar(idCliente);
+        return c == null ? null : emissorExtratos.emitirNotaFiscal(c, data);
+    }
+
+    /**
+     * Caso de uso "Cancelar matrícula": cancela todos os agendamentos ainda
+     * ativos do cliente (preliminares e confirmados, com as regras de
+     * reembolso de cada estado), emite a nota fiscal final e remove o cliente
+     * do cadastro.
+     *
+     * @param idCliente cliente
+     * @param hoje      data do cancelamento
+     * @return total devolvido ao cliente, ou -1 se o cliente não existe
+     */
+    public double cancelarMatricula(int idCliente, LocalDate hoje) {
+        sessao.exigirLogin();
+        Cliente c = cadastroClientes.buscar(idCliente);
+        if (c == null) {
+            return -1;
+        }
+        double devolvido = 0;
+        for (Agendamento ag : controleAgendamentos.doCliente(idCliente)) {
+            if (ag.getStatus() == StatusAgendamento.PRELIMINAR
+                    || ag.getStatus() == StatusAgendamento.CONFIRMADO) {
+                devolvido += controleAgendamentos.cancelar(ag.getId(), hoje);
+            }
+        }
+        emissorExtratos.emitirNotaFiscal(c, hoje);
+        cadastroClientes.remover(idCliente);
+        return devolvido;
     }
 
     // ===================================================== persistência

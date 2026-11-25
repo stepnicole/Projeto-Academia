@@ -3,13 +3,10 @@ package com.mycompany.academia.model;
 import java.time.LocalDate;
 
 /**
- * Relatório de vendas de um período (um dia ou um mês): diárias,
- * mensalidades, vendas da lojinha/lanchonete e reembolsos.
- * <p>
- * Os valores são calculados pelo {@link com.mycompany.academia.servico.Financeiro} e o relatório fica guardado
- * (e salvo em JSON) para consulta posterior.
- *
+ * Balanço de receitas e despesas de um mês, com estatísticas básicas.
+ * Só o administrador pode gerar (ver {@link com.mycompany.academia.controller.Financeiro#gerarBalancoMensal}).
  */
+
 public class RelatorioVendas implements Identificador {
 
     private int id;

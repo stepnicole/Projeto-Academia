@@ -45,6 +45,11 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 /**
  * Classe principal: testa, em ordem, todas as funcionalidades do sistema da
@@ -411,8 +416,321 @@ public class Academia {
 
         recuperado.logout();
         System.out.println("Depois do logout, alguém logado? " + recuperado.getSessao().estaLogado());
+        
+        
+        // ==================================================================
+        // Questão 18
+        // ==================================================================
+        {
+            titulo("QUESTÃO 18 - ITERATOR E FOREACH");
+            // O ArrayList implementa a interface Iterable, então sabe criar um
+            // Iterator: um objeto que "aponta" para a posição atual da lista.
+            // hasNext() pergunta se ainda há elemento; next() devolve o
+            // elemento e avança para o próximo.
+            List<Cliente> listaClientes = new ArrayList<>(clientes.getTodos());
+            Iterator<Cliente> iterator = listaClientes.iterator();
+            System.out.println("-- Percorrendo com Iterator (while hasNext / next) --");
+            while (iterator.hasNext()) {
+                imprimir(iterator.next());
+            }
+
+            // O foreach é uma forma resumida de escrever o mesmo laço: o
+            // compilador o transforma no código acima (cria o Iterator e chama
+            // hasNext() e next() automaticamente).
+            System.out.println("-- Percorrendo com foreach --");
+            for (Cliente c : listaClientes) {
+                imprimir(c);
+            }
+
+            // Diferença prática: com o Iterator dá para remover com segurança
+            // durante o percurso; no foreach, remover da lista lança
+            // ConcurrentModificationException.
+            Iterator<Cliente> it2 = listaClientes.iterator();
+            while (it2.hasNext()) {
+                if (it2.next().calcularTotalConta() < 50) {
+                    it2.remove();
+                }
+            }
+            System.out.println("Iterator.remove() tirou da cópia quem gastou menos de R$ 50: " + nomes(listaClientes));
+            try {
+                for (Cliente c : listaClientes) {
+                    if (c.getNome().startsWith("Ana")) {
+                        listaClientes.remove(c);
+                    }
+                }
+            } catch (ConcurrentModificationException e) {
+                System.out.println("Remover dentro do foreach: ConcurrentModificationException");
+            }
+        }
+
+        // ==================================================================
+        // Questão 19
+        // ==================================================================
+        {
+            titulo("QUESTÃO 19 - COMPARATOR E COLLECTIONS.SORT");
+            Comparator<Cliente> porNome = new ClientePorNome();
+            Comparator<Cliente> porGasto = new ClientePorTotalGasto();
+            System.out.println("porNome.compare(Ana, Pedro)  = " + porNome.compare(ana, pedro) + " (negativo: Ana vem antes)");
+            System.out.println("porNome.compare(Pedro, Ana)  = " + porNome.compare(pedro, ana) + " (positivo: Pedro vem depois)");
+            System.out.println("porNome.compare(Ana, Ana)    = " + porNome.compare(ana, ana) + " (zero: empate)");
+            System.out.println("porGasto.compare(Ana, Pedro) = " + porGasto.compare(ana, pedro) + " (Pedro gastou mais)");
+
+            List<Cliente> lista = new ArrayList<>(clientes.getTodos());
+            Collections.sort(lista, porNome);
+            System.out.println("1ª ordenação - Collections.sort(lista, new ClientePorNome()):");
+            for (Cliente c : lista) {
+                imprimir(c.getNome());
+            }
+            Collections.sort(lista, porGasto);
+            System.out.println("2ª ordenação - Collections.sort(lista, new ClientePorTotalGasto()):");
+            for (Cliente c : lista) {
+                imprimir(c.getNome() + " - R$ " + String.format("%.2f", c.calcularTotalConta()));
+            }
+
+            List<Agendamento> ags = new ArrayList<>(agenda.getAgendamentos());
+            Collections.sort(ags, new AgendamentoPorPreco());
+            System.out.println("Agendamentos - Collections.sort(..., new AgendamentoPorPreco()): ");
+            for (Agendamento a : ags) {
+                imprimir("nº " + a.getId() + " R$ " + a.getPreco() + " " + a.getStatus());
+            }
+            Collections.sort(ags, new AgendamentoPorStatus());
+            System.out.println("Agendamentos - Collections.sort(..., new AgendamentoPorStatus()): ");
+            for (Agendamento a : ags) {
+                imprimir("nº " + a.getId() + " " + a.getStatus() + " " + a.getPrimeiraData());
+            }
+        }
+
+        // ==================================================================
+        // Questão 20
+        // ==================================================================
+        {
+            titulo("QUESTÃO 20 - ENCONTRAR (ITERATOR + COMPARATOR) x BINARYSEARCH");
+            Comparator<Cliente> porNome = new ClientePorNome();
+            Comparator<Cliente> porId = new ClientePorId();
+            // A chave é um Cliente "modelo" só com o campo procurado preenchido.
+            // (Ela também é uma instância de Cliente, por isso entra nos contadores.)
+            Cliente chaveNome = new Cliente(0, "Carla Viajante", "", "", "", "", "");
+            Cliente chaveId = new Cliente(2, "", "", "", "", "", "");
+            Cliente chaveInexistente = new Cliente(0, "Zeca", "", "", "", "", "");
+
+            System.out.println("encontrar(chave nome 'Carla Viajante', ClientePorNome): " + clientes.encontrar(chaveNome, porNome));
+            System.out.println("encontrar(chave id 2, ClientePorId): " + clientes.encontrar(chaveId, porId));
+            System.out.println("encontrar(chave nome 'Zeca', ClientePorNome): " + clientes.encontrar(chaveInexistente, porNome));
+
+            // binarySearch exige a lista ORDENADA pelo mesmo Comparator.
+            List<Cliente> ordenadaPorNome = clientes.listar(porNome);
+            int pos = Collections.binarySearch(ordenadaPorNome, chaveNome, porNome);
+            System.out.println("binarySearch(lista ordenada por nome, 'Carla Viajante') = posição " + pos
+                    + " -> " + ordenadaPorNome.get(pos).getNome());
+            int posZeca = Collections.binarySearch(ordenadaPorNome, chaveInexistente, porNome);
+            System.out.println("binarySearch(..., 'Zeca') = " + posZeca
+                    + " (negativo: não achou; entraria na posição " + (-posZeca - 1) + ")");
+            List<Cliente> ordenadaPorId = clientes.listar(porId);
+            int posId = Collections.binarySearch(ordenadaPorId, chaveId, porId);
+            System.out.println("binarySearch(lista ordenada por id, id 2) = posição " + posId
+                    + " -> " + ordenadaPorId.get(posId).getNome());
+
+            System.out.println("Comparação:");
+            System.out.println("  encontrar(): busca sequencial com Iterator, funciona com a lista em qualquer ordem,");
+            System.out.println("               devolve o próprio cliente (ou null); no pior caso olha todos (O(n)).");
+            System.out.println("  binarySearch(): divide a lista ao meio a cada passo (O(log n)), mas exige a lista");
+            System.out.println("               ordenada pelo mesmo critério e devolve a POSIÇÃO (negativa se não achar).");
+        }
+
+        // ==================================================================
+        // Questão 21
+        // ==================================================================
+        cenarioDezClientes();
     }
 
+        /** Imprime um objeto com recuo (usado nos testes do Iterator). */
+    private static void imprimir(Object objeto) {
+        System.out.println("  " + objeto);
+    }
+
+    /** Imprime o título de uma etapa do cenário da Questão 21. */
+    private static void etapa(String texto) {
+        System.out.println("\n--- " + texto + " ---");
+    }
+
+    /**
+     * Questão 21: atendimento de 10 clientes, cada um com um caminho
+     * diferente, do cadastro até a nota fiscal ou o cancelamento da
+     * matrícula. Usa um sistema separado (pasta "dados_cenario") e datas de
+     * dezembro de 2026.
+     *
+     * @throws IOException se houver erro ao salvar os dados do cenário
+     */
+    private static void cenarioDezClientes() throws IOException {
+        titulo("QUESTÃO 21 - CENÁRIO COM 10 CLIENTES");
+        Sistema s = new Sistema("dados_cenario");
+        CadastroColaboradores colabs = s.getCadastroColaboradores();
+        CadastroClientes clientes = s.getCadastroClientes();
+        CadastroAulas aulas = s.getCadastroAulas();
+        ControleAgendamentos agenda = s.getControleAgendamentos();
+        ControleLojinha lojaCtrl = s.getControleLojinha();
+        ControleCatraca catraca = s.getControleCatraca();
+        Financeiro financeiro = s.getFinanceiro();
+
+        // ----------------------------------------------------- preparação
+        etapa("Preparação: administradora, recepcionista, aulas e produtos");
+        colabs.criarAdministradorInicial("Stephanie Nicole", "Rua Principal, 10", "38 99999-0001",
+                "ste@gymcorn.com", "123.456.789-01", "stephanie", "admin123", 8000);
+        s.login("stephanie", "admin123");
+        colabs.cadastrarColaborador("Maria Augusta", "Rua B, 20", "38 98888-0002",
+                "maria@gymcorn.com", "987.654.321-00", "maria", "1234", 2200, "Recepcionista");
+        s.logout();
+        System.out.println("Recepcionista entra no sistema: " + s.login("maria", "1234"));
+        Instrutor marcos = aulas.cadastrarInstrutor("Marcos", "Rua F", "38 94444-0000", "marcos@gymcorn.com", "222.333.444-55", TipoAula.SPINNING, 2500);
+        Instrutor lu = aulas.cadastrarInstrutor("Lu", "Rua G", "38 93333-0000", "lu@gymcorn.com", "666.777.888-99", TipoAula.MUSCULACAO, 2500);
+        Instrutor rita = aulas.cadastrarInstrutor("Rita", "Rua H", "38 92222-0000", "rita@gymcorn.com", "777.888.999-00", TipoAula.PILATES, 2300);
+        Instrutor duda = aulas.cadastrarInstrutor("Duda", "Rua I", "38 91111-0000", "duda@gymcorn.com", "111.999.888-77", TipoAula.FIT_DANCE, 2300);
+        Aula spinning = aulas.cadastrarAula(TipoAula.SPINNING, marcos.getId(), LocalDateTime.of(2026, 12, 21, 8, 0));
+        Aula musculacao = aulas.cadastrarAula(TipoAula.MUSCULACAO, lu.getId(), LocalDateTime.of(2026, 12, 14, 7, 0));
+        Aula pilates = aulas.cadastrarAula(TipoAula.PILATES, rita.getId(), LocalDateTime.of(2026, 12, 21, 18, 0));
+        Aula fitDance = aulas.cadastrarAula(TipoAula.FIT_DANCE, duda.getId(), LocalDateTime.of(2026, 12, 18, 19, 0));
+        Produto agua = lojaCtrl.cadastrarProduto("Água 500ml", "Sem gás", CategoriaProduto.LANCHONETE, 3.0, 40, 10);
+        Produto barra = lojaCtrl.cadastrarProduto("Barra de proteína", "Chocolate", CategoriaProduto.LANCHONETE, 8.5, 20, 5);
+        Produto luva = lojaCtrl.cadastrarProduto("Luva de treino", "Tamanho M", CategoriaProduto.LOJA, 45.0, 2, 2);
+        Produto toalha = lojaCtrl.cadastrarProduto("Toalha GYM CORN", "Microfibra", CategoriaProduto.LOJA, 25.0, 8, 3);
+        System.out.println("Aulas: " + aulas.getAulas().size() + " | Produtos: " + lojaCtrl.getLojinha().getCatalogo().getProdutos().size());
+
+        // ----------------------------------------------------- 1. cadastro
+        etapa("1. Cadastro dos 10 clientes");
+        Cliente lucas = clientes.cadastrar("Lucas Turista", "Rua 1 - BH", "31 90000-0001", "lucas@email.com", "100.200.300-01", "4111111111110001");
+        Cliente marina = clientes.cadastrar("Marina Mensalista", "Rua 2 - Milho Verde", "38 90000-0002", "marina@email.com", "100.200.300-02", "4111111111110002");
+        Cliente rafael = clientes.cadastrar("Rafael Indeciso", "Rua 3 - Serro", "38 90000-0003", "rafael@email.com", "100.200.300-03", "4111111111110003");
+        Cliente julia = clientes.cadastrar("Júlia Viajante", "Rua 4 - SP", "11 90000-0004", "julia@email.com", "100.200.300-04", "4111111111110004");
+        Cliente bruno = clientes.cadastrar("Bruno Atrasado", "Rua 5 - RJ", "21 90000-0005", "bruno@email.com", "100.200.300-05", "4111111111110005");
+        Cliente camila = clientes.cadastrar("Camila Dançarina", "Rua 6 - Diamantina", "38 90000-0006", "camila@email.com", "100.200.300-06", "4111111111110006");
+        Cliente diego = clientes.cadastrar("Diego Apressado", "Rua 7 - BH", "31 90000-0007", "diego@email.com", "100.200.300-07", "4111111111110007");
+        Cliente fernanda = clientes.cadastrar("Fernanda Desistente", "Rua 8 - Milho Verde", "38 90000-0008", "fernanda@email.com", "100.200.300-08", "4111111111110008");
+        Cliente gustavo = clientes.cadastrar(100, "Gustavo Esquecido", "Rua 9 - Curvelo", "38 90000-0009", "gustavo@email.com", "100.200.300-09", "4111111111110009");
+        Cliente isabela = clientes.cadastrar("Isabela Turista", "Rua 10 - Vitória", "27 90000-0010", "isabela@email.com", "100.200.300-10", "4111111111110010");
+        System.out.println("Gustavo recebeu o id escolhido: " + gustavo.getId());
+        System.out.println("Isabela atualiza o telefone: " + clientes.editar(isabela.getId(), null, null, "27 98888-0010", null, null));
+        System.out.println("Clientes cadastrados: " + nomes(clientes.listar(new ClientePorNome())));
+
+        // ----------------------------------------------------- 2. agendamentos
+        etapa("2. Agendamentos (03/12)");
+        LocalDate d03 = LocalDate.of(2026, 12, 3);
+        Agendamento agLucas = agenda.realizar(lucas.getId(), spinning.getId(), List.of(LocalDate.of(2026, 12, 21)), 80, TipoAgendamento.DIARIA, d03);
+        Agendamento agMarina = agenda.realizar(marina.getId(), musculacao.getId(), List.of(LocalDate.of(2026, 12, 14)), 250, TipoAgendamento.MENSALIDADE, d03);
+        Agendamento agRafael = agenda.realizar(rafael.getId(), fitDance.getId(), List.of(LocalDate.of(2026, 12, 18)), 70, TipoAgendamento.DIARIA, d03);
+        Agendamento agJulia = agenda.realizar(julia.getId(), pilates.getId(), List.of(LocalDate.of(2026, 12, 21)), 90, TipoAgendamento.DIARIA, d03);
+        Agendamento agBruno = agenda.realizar(bruno.getId(), spinning.getId(), List.of(LocalDate.of(2026, 12, 21)), 80, TipoAgendamento.DIARIA, d03);
+        Agendamento agCamila = agenda.realizar(camila.getId(), fitDance.getId(),
+                List.of(LocalDate.of(2026, 12, 18), LocalDate.of(2026, 12, 19)), 130, TipoAgendamento.DIARIA, d03);
+        try {
+            agenda.realizar(diego.getId(), spinning.getId(), List.of(LocalDate.of(2026, 12, 4)), 80, TipoAgendamento.DIARIA, d03);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Diego tentou agendar para o dia seguinte: " + e.getMessage());
+        }
+        Agendamento agDiego = agenda.realizar(diego.getId(), spinning.getId(), List.of(LocalDate.of(2026, 12, 21)), 80, TipoAgendamento.DIARIA, d03);
+        Agendamento agFernanda = agenda.realizar(fernanda.getId(), musculacao.getId(), List.of(LocalDate.of(2026, 12, 14)), 250, TipoAgendamento.MENSALIDADE, d03);
+        Agendamento agGustavo = agenda.realizar(gustavo.getId(), pilates.getId(), List.of(LocalDate.of(2026, 12, 21)), 90, TipoAgendamento.DIARIA, d03);
+        Agendamento agIsabela = agenda.realizar(isabela.getId(), spinning.getId(), List.of(LocalDate.of(2026, 12, 21)), 80, TipoAgendamento.DIARIA, d03);
+        System.out.println("Agendamentos preliminares criados: " + agenda.getAgendamentos().size());
+        System.out.println("Vagas do spinning: " + spinning.getVagasOcupadas() + "/" + spinning.getSala().getCapacidade());
+        System.out.println("Camila agendou dois dias de fit dance: " + agCamila.getDatas());
+
+        // ----------------------------------------------------- 3. confirmações
+        etapa("3. Confirmações e débito no cartão (04/12)");
+        LocalDate d04 = LocalDate.of(2026, 12, 4);
+        for (Agendamento ag : List.of(agLucas, agMarina, agJulia, agBruno, agCamila, agDiego, agFernanda, agIsabela)) {
+            Extrato e = agenda.confirmar(ag.getId(), d04);
+            System.out.println("Confirmado agendamento nº " + ag.getId() + " -> extrato nº " + e.getId());
+        }
+        System.out.println("Rafael não confirmou: " + agRafael.getStatus());
+        System.out.println("Gustavo tenta confirmar em 15/12 (prazo era " + agGustavo.getPrazoConfirmacao() + "): "
+                + (agenda.confirmar(agGustavo.getId(), LocalDate.of(2026, 12, 15)) != null ? "confirmado" : "recusado"));
+
+        // ----------------------------------------------------- 4. cancelamentos
+        etapa("4. Cancelamentos e expirações");
+        System.out.println("Fernanda cancela a matrícula em 10/12 (antes do prazo de reembolso): devolvido R$ "
+                + String.format("%.2f", s.cancelarMatricula(fernanda.getId(), LocalDate.of(2026, 12, 10))));
+        System.out.println("Expirados em 12/12: " + agenda.expirarPendentes(LocalDate.of(2026, 12, 12)) + " (Rafael)");
+        System.out.println("Júlia cancela em 15/12 (até 3 dias antes): devolvido R$ "
+                + String.format("%.2f", agenda.cancelar(agJulia.getId(), LocalDate.of(2026, 12, 15))));
+        System.out.println("Expirados em 15/12: " + agenda.expirarPendentes(LocalDate.of(2026, 12, 15)) + " (Gustavo)");
+        System.out.println("Bruno cancela em 20/12 (menos de 3 dias): devolvido R$ "
+                + String.format("%.2f", agenda.cancelar(agBruno.getId(), LocalDate.of(2026, 12, 20))));
+        System.out.println("Vagas do spinning após o cancelamento do Bruno: " + spinning.getVagasOcupadas());
+
+        // ----------------------------------------------------- 5. catraca
+        etapa("5. Acesso às aulas pela catraca");
+        for (int dia = 14; dia <= 16; dia++) {
+            catraca.receberEvento(marina.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, dia, 6, 50));
+            catraca.receberEvento(marina.getId(), TipoAcesso.SAIDA, LocalDateTime.of(2026, 12, dia, 8, 5));
+        }
+        System.out.println("Marina (mensalista) treinou 3 dias: " + catraca.historico(marina.getId()).size() + " marcações");
+        System.out.println("Camila entra 18/12: " + (catraca.receberEvento(camila.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 18, 18, 50)) != null));
+        System.out.println("Camila passa de novo sem sair: " + (catraca.receberEvento(camila.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 18, 18, 55)) != null));
+        System.out.println("Pessoas na academia em 18/12: " + catraca.quantidadePresentes());
+        catraca.receberEvento(camila.getId(), TipoAcesso.SAIDA, LocalDateTime.of(2026, 12, 18, 20, 10));
+        catraca.receberEvento(camila.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 19, 18, 45));
+        catraca.receberEvento(camila.getId(), TipoAcesso.SAIDA, LocalDateTime.of(2026, 12, 19, 20, 0));
+        System.out.println("Rafael (expirado) tenta entrar 18/12: " + (catraca.receberEvento(rafael.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 18, 18, 55)) != null));
+        System.out.println("Isabela tenta entrar no dia errado (20/12): " + (catraca.receberEvento(isabela.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 20, 8, 0)) != null));
+        for (Cliente c : List.of(lucas, diego, isabela)) {
+            catraca.receberEvento(c.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 12, 21, 7, 50));
+        }
+        System.out.println("Pessoas na academia em 21/12 às 8h: " + catraca.quantidadePresentes() + " " + nomes(catraca.clientesPresentes()));
+        for (Cliente c : List.of(lucas, diego, isabela)) {
+            catraca.receberEvento(c.getId(), TipoAcesso.SAIDA, LocalDateTime.of(2026, 12, 21, 9, 10));
+        }
+        System.out.println(catraca.relatorioMensal(2026, 12));
+
+        // ----------------------------------------------------- 6. lojinha
+        etapa("6. Vendas na lojinha e baixas no estoque");
+        lojaCtrl.registrarVenda(marina.getId(), Map.of(luva.getId(), 1), LocalDateTime.of(2026, 12, 15, 8, 10));
+        Map<Integer, Integer> pedidoCamila = new LinkedHashMap<>();
+        pedidoCamila.put(barra.getId(), 2);
+        pedidoCamila.put(toalha.getId(), 1);
+        lojaCtrl.registrarVenda(camila.getId(), pedidoCamila, LocalDateTime.of(2026, 12, 18, 20, 15));
+        try {
+            lojaCtrl.registrarVenda(diego.getId(), Map.of(luva.getId(), 5), LocalDateTime.of(2026, 12, 21, 9, 15));
+        } catch (EstoqueInsuficienteExcecao e) {
+            System.out.println("Diego quer 5 luvas: " + e.getMessage());
+        }
+        System.out.println("Produtos para repor: " + lojaCtrl.getLojinha().produtosParaRepor());
+        System.out.println("Reposição de 10 luvas: " + lojaCtrl.getLojinha().reporEstoque(luva.getId(), 10));
+        lojaCtrl.registrarVenda(diego.getId(), Map.of(luva.getId(), 1), LocalDateTime.of(2026, 12, 21, 9, 20));
+        lojaCtrl.registrarVenda(lucas.getId(), Map.of(agua.getId(), 2), LocalDateTime.of(2026, 12, 21, 9, 15));
+        System.out.println("Estoque de luvas: " + lojaCtrl.verificarProduto(luva.getId()));
+        System.out.println("Mais vendidos: " + lojaCtrl.getLojinha().getHistoricoVendas().produtosMaisVendidos(3));
+
+        // ----------------------------------------------------- 7. conclusão das aulas
+        etapa("7. Aulas concluídas (22/12)");
+        System.out.println("Agendamentos que passaram a Realizado: " + agenda.concluirRealizados(LocalDate.of(2026, 12, 22)));
+        for (Agendamento ag : agenda.listar(new AgendamentoPorCliente())) {
+            imprimir("nº " + ag.getId() + " cliente " + ag.getIdCliente() + " - " + ag.getTipo() + " - " + ag.getStatus());
+        }
+
+        // ----------------------------------------------------- 8. fechamento
+        etapa("8. Fechamento: notas fiscais e cancelamentos de matrícula");
+        System.out.println("Rafael cancela a matrícula (não confirmou): devolvido R$ "
+                + String.format("%.2f", s.cancelarMatricula(rafael.getId(), LocalDate.of(2026, 12, 22))));
+        System.out.println("Gustavo cancela a matrícula (perdeu o prazo): devolvido R$ "
+                + String.format("%.2f", s.cancelarMatricula(gustavo.getId(), LocalDate.of(2026, 12, 22))));
+        for (Cliente c : List.of(lucas, marina, julia, bruno, camila, diego, isabela)) {
+            s.emitirNotaFiscal(c.getId(), LocalDate.of(2026, 12, 22));
+        }
+        System.out.println("Clientes que continuam cadastrados: " + nomes(clientes.listar(new ClientePorNome())));
+
+        // ----------------------------------------------------- 9. resultado do mês
+        etapa("9. Resultado de dezembro");
+        System.out.println(financeiro.relatorioVendasMes(2026, 12));
+        s.logout();
+        s.login("stephanie", "admin123");
+        financeiro.lancarDespesa("Produtos de limpeza", CategoriaDespesa.LIMPEZA, 300, LocalDate.of(2026, 12, 2));
+        financeiro.lancarDespesa("Conta de luz", CategoriaDespesa.CONTAS, 580, LocalDate.of(2026, 12, 10));
+        System.out.println(financeiro.gerarBalancoMensal(2026, 12));
+        s.salvarDados();
+        System.out.println("Cenário salvo em 'dados_cenario/'.");
+    }
+
+    
     /**
      * Lista só os nomes, para a saída ficar curta.
      */
