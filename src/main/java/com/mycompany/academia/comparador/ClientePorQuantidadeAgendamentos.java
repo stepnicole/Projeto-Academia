@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena clientes do que tem mais agendamentos para o que tem menos (empate: nome).
  *
- * @author Ste
  */
 public class ClientePorQuantidadeAgendamentos implements Comparator<Cliente> {
 

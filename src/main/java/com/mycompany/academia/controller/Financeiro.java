@@ -24,13 +24,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Financeiro da academia — relatórios de vendas
- * (dia/mês), despesas e balanço mensal.
+ * Financeiro da academia, relatórios de vendas (dia/mês), despesas e balanço
+ * mensal.
  * <p>
  * Relatórios de vendas podem ser emitidos por qualquer funcionário logado;
  * despesas e balanço só pelo administrador.
  *
- * @author Ste
  */
 public class Financeiro {
 
@@ -46,15 +45,15 @@ public class Financeiro {
     private final List<RelatorioVendas> relatoriosVendas;
 
     /**
-     * @param sessao        sessão (login e permissão)
-     * @param agendamentos  fonte dos pagamentos de diárias/mensalidades
-     * @param lojinha       fonte das vendas da lojinha
-     * @param catraca       fonte das estatísticas de acesso
+     * @param sessao sessão (login e permissão)
+     * @param agendamentos fonte dos pagamentos de diárias/mensalidades
+     * @param lojinha fonte das vendas da lojinha
+     * @param catraca fonte das estatísticas de acesso
      * @param colaboradores fonte dos salários de funcionários
-     * @param aulas         fonte dos salários de instrutores
+     * @param aulas fonte dos salários de instrutores
      */
     public Financeiro(Sessao sessao, ControleAgendamentos agendamentos, Lojinha lojinha,
-                      Catraca catraca, CadastroColaboradores colaboradores, CadastroAulas aulas) {
+            Catraca catraca, CadastroColaboradores colaboradores, CadastroAulas aulas) {
         this.sessao = sessao;
         this.agendamentos = agendamentos;
         this.lojinha = lojinha;
@@ -66,8 +65,9 @@ public class Financeiro {
     }
 
     // ------------------------------------------------------------ vendas
-
-    /** Soma as vendas do período, sem guardar o relatório. */
+    /**
+     * Soma as vendas do período, sem guardar o relatório.
+     */
     private RelatorioVendas calcularVendas(String descricao, LocalDate inicio, LocalDate fim) {
         RelatorioVendas r = new RelatorioVendas(Identificador.proximoId(relatoriosVendas),
                 descricao, inicio, fim);
@@ -122,12 +122,11 @@ public class Financeiro {
     }
 
     // ------------------------------------------------------------ despesas
-
     /**
      * @param descricao descrição
      * @param categoria categoria
-     * @param valor     valor (positivo)
-     * @param data      data
+     * @param valor valor (positivo)
+     * @param data data
      * @return a despesa lançada
      */
     public Despesa lancarDespesa(String descricao, CategoriaDespesa categoria, double valor, LocalDate data) {
@@ -143,24 +142,32 @@ public class Financeiro {
     /**
      * Edita uma despesa. Parâmetros {@code null} mantêm o valor atual.
      *
-     * @param id        despesa
+     * @param id despesa
      * @param descricao nova descrição ou null
      * @param categoria nova categoria ou null
-     * @param valor     novo valor ou null
-     * @param data      nova data ou null
+     * @param valor novo valor ou null
+     * @param data nova data ou null
      * @return false se não existe
      */
     public boolean editarDespesa(int id, String descricao, CategoriaDespesa categoria,
-                                 Double valor, LocalDate data) {
+            Double valor, LocalDate data) {
         sessao.exigirAdministrador();
         Despesa d = buscarDespesa(id);
         if (d == null) {
             return false;
         }
-        if (descricao != null) d.setDescricao(descricao);
-        if (categoria != null) d.setCategoria(categoria);
-        if (valor != null && valor > 0) d.setValor(valor);
-        if (data != null) d.setData(data);
+        if (descricao != null) {
+            d.setDescricao(descricao);
+        }
+        if (categoria != null) {
+            d.setCategoria(categoria);
+        }
+        if (valor != null && valor > 0) {
+            d.setValor(valor);
+        }
+        if (data != null) {
+            d.setData(data);
+        }
         return true;
     }
 
@@ -199,8 +206,8 @@ public class Financeiro {
     }
 
     /**
-     * Lança como despesa o salário de todos os funcionários e instrutores,
-     * no último dia do mês.
+     * Lança como despesa o salário de todos os funcionários e instrutores, no
+     * último dia do mês.
      *
      * @param ano ano
      * @param mes mês
@@ -223,7 +230,6 @@ public class Financeiro {
     }
 
     // ------------------------------------------------------------ balanço
-
     /**
      * Gera o balanço do mês: receitas, despesas por categoria, saldo e
      * estatísticas (agendamentos, cancelamentos, acessos na catraca).
@@ -246,8 +252,12 @@ public class Financeiro {
             if (YearMonth.from(ag.getDataCriacao()).equals(ym)) {
                 StatusAgendamento st = ag.getStatus();
                 // realizado também foi confirmado e pago
-                if (st == StatusAgendamento.CONFIRMADO || st == StatusAgendamento.REALIZADO) confirmados++;
-                if (st == StatusAgendamento.CANCELADO) cancelados++;
+                if (st == StatusAgendamento.CONFIRMADO || st == StatusAgendamento.REALIZADO) {
+                    confirmados++;
+                }
+                if (st == StatusAgendamento.CANCELADO) {
+                    cancelados++;
+                }
             }
         }
         b.setQtdAgendamentosConfirmados(confirmados);
@@ -258,12 +268,16 @@ public class Financeiro {
         return b;
     }
 
-    /** @return relatórios de vendas emitidos (somente leitura) */
+    /**
+     * @return relatórios de vendas emitidos (somente leitura)
+     */
     public List<RelatorioVendas> getRelatoriosVendas() {
         return Collections.unmodifiableList(relatoriosVendas);
     }
 
-    /** @return todas as despesas (somente leitura) */
+    /**
+     * @return todas as despesas (somente leitura)
+     */
     public List<Despesa> getDespesas() {
         return Collections.unmodifiableList(despesas);
     }
@@ -271,7 +285,7 @@ public class Financeiro {
     /**
      * Substitui os dados em memória pelos lidos do arquivo.
      *
-     * @param despesasLidas   despesas recuperadas
+     * @param despesasLidas despesas recuperadas
      * @param relatoriosLidos relatórios recuperados
      */
     public void carregar(List<Despesa> despesasLidas, List<RelatorioVendas> relatoriosLidos) {

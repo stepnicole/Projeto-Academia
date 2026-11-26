@@ -17,7 +17,6 @@ import java.util.Map;
  * sistema (exige login, confere se o cliente existe e emite o extrato da
  * venda). As regras de estoque continuam dentro da própria Lojinha.
  *
- * @author Ste
  */
 public class ControleLojinha {
 

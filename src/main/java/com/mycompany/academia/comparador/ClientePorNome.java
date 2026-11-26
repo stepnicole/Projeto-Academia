@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena clientes pelo nome, em ordem alfabética (ignora maiúsculas/minúsculas).
  *
- * @author Ste
  */
 public class ClientePorNome implements Comparator<Cliente> {
 

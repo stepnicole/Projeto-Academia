@@ -9,7 +9,6 @@ import java.util.List;
  * permissões. Todos os serviços recebem a mesma sessão e a consultam antes
  * de executar uma operação.
  *
- * @author Ste
  */
 public class Sessao {
 

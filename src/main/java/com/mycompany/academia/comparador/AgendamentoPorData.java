@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena agendamentos pela primeira data agendada (mais próxima primeiro).
  *
- * @author Ste
  */
 public class AgendamentoPorData implements Comparator<Agendamento> {
 

@@ -59,7 +59,7 @@ import java.util.Iterator;
  * cenário com 10 clientes) para que o resultado seja sempre o mesmo,
  * independente do dia em que o programa for executado.
  *
- * @author Stephanie
+ * @author Stephanie Nicole de Souza Silva
  */
 public class Academia {
 
@@ -90,7 +90,8 @@ public class Academia {
         ControleCatraca catraca = sistema.getControleCatraca();
         Financeiro financeiro = sistema.getFinanceiro();
 
-        // ------------------------------------------------------------------
+        // Questão 1 (classes e relações) e Questão 2 (uso por colaboradores e administrador)
+        // Questão 15: JavaDoc gerado a partir dos comentários /** */ (pasta JavaDoc)
         titulo("1. AUTENTICAÇÃO");
         Administrador dona = colabs.criarAdministradorInicial("Stephanie Nicole", "Rua Principal, 10",
                 "38 99999-0001", "ste@gymcorn.com", "123.456.789-01", "stephanie", "admin123", 8000);
@@ -104,7 +105,7 @@ public class Academia {
         System.out.println("Login correto: " + sistema.login("stephanie", "admin123"));
         System.out.println("Usuário logado: " + sistema.getSessao().getUsuarioLogado().getNome());
 
-        // ------------------------------------------------------------------
+        // Questão 6: cadastrar e editar colaboradores
         titulo("2. COLABORADORES E ADMINISTRADORES");
         Colaborador maria = colabs.cadastrarColaborador("Maria Augusta", "Rua B, 20", "38 98888-0002",
                 "maria-augusta@gymcorn.com", "987.654.321-00", "maria", "1234", 2200, "Recepcionista");
@@ -131,7 +132,7 @@ public class Academia {
         System.out.println("Remover sócio: " + colabs.remover(socio.getId()));
         System.out.println("Todos os funcionários: " + colabs.listarTodos());
 
-        // ------------------------------------------------------------------
+        // Questão 7: cadastrar, alterar e excluir clientes
         titulo("3. CLIENTES");
         Cliente ana = clientes.cadastrar("Ana Turista", "Rua A, 1 - BH", "31 99999-0000",
                 "ana@email.com", "123.123.123-45", "1234567812345678");
@@ -152,7 +153,7 @@ public class Academia {
         System.out.println("Remover temporário: " + sistema.removerCliente(temp.getId()));
         System.out.println("Remover inexistente: " + sistema.removerCliente(999));
 
-        // ------------------------------------------------------------------
+        // Questão 5: as 4 salas guardadas de forma estática
         titulo("4. SALAS (ESTÁTICAS), INSTRUTORES E AULAS");
         for (Sala s : Sala.getSalas()) {
             System.out.println(s);
@@ -176,7 +177,7 @@ public class Academia {
         System.out.println("Remover instrutor com aula: " + aulas.removerInstrutor(marcos.getId()));
         System.out.println("Aulas de spinning com vaga: " + aulas.listarComVaga(TipoAula.SPINNING));
 
-        // ------------------------------------------------------------------
+        // Questão 8: vendas de diárias e mensalidades / Questão 10: extrato de cada venda
         titulo("5. AGENDAMENTOS");
         LocalDate hoje = LocalDate.of(2026, 11, 3);
         Agendamento agAna = agenda.realizar(ana.getId(), spinning.getId(),
@@ -223,7 +224,7 @@ public class Academia {
         System.out.println("Agendamentos da Ana: " + agenda.doCliente(ana.getId()));
         System.out.println(agenda.imprimirVendas());
 
-        // ------------------------------------------------------------------
+        // Questão 10: extrato de cada venda da lojinha
         titulo("6. LOJINHA E LANCHONETE");
         sistema.logout();
         sistema.login("bia", "abcd");
@@ -263,7 +264,7 @@ public class Academia {
         System.out.println("Estoque: " + loja.getEstoque());
         System.out.println(loja);
 
-        // ------------------------------------------------------------------
+        // Questão 9: reservas e ações da catraca salvas no sistema
         titulo("7. CATRACA");
         System.out.println("Pedro entra 16/11 07:00: " + catraca.receberEvento(pedro.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 11, 16, 7, 0)));
         System.out.println("Pedro entra de novo: " + catraca.receberEvento(pedro.getId(), TipoAcesso.ENTRADA, LocalDateTime.of(2026, 11, 16, 7, 5)));
@@ -291,7 +292,6 @@ public class Academia {
         System.out.println(catraca.relatorioMensal(2026, 11));
         System.out.println(catraca.relatorioAnual(2026));
 
-        // ------------------------------------------------------------------
         titulo("7.1 PADRÃO STATE: CONFIRMADO -> REALIZADO");
         System.out.println("Concluídos em 21/11 (aula já aconteceu): "
                 + agenda.concluirRealizados(LocalDate.of(2026, 11, 21)));
@@ -301,7 +301,7 @@ public class Academia {
         System.out.println("Mensalidade do Pedro vale até " + agPedro.getUltimaData()
                 + ", status: " + agPedro.getStatus());
 
-        // ------------------------------------------------------------------
+        // Questão 8: dados das vendas e dos clientes / Questão 13: Comparator
         titulo("8. RELATÓRIOS DE VENDAS E CONTA DO CLIENTE");
         System.out.println(financeiro.relatorioVendasDia(LocalDate.of(2026, 11, 5)));
         System.out.println(financeiro.relatorioVendasMes(2026, 11));
@@ -315,7 +315,7 @@ public class Academia {
                 + nomes(clientes.listar(new ClientePorQuantidadeAgendamentos())));
         System.out.println(new ClientePorTotalGasto() + ": " + nomes(clientes.listar(new ClientePorTotalGasto())));
 
-        // ------------------------------------------------------------------
+        // Questão 2: colaborador sem acesso ao financeiro
         titulo("9. PERMISSÕES: COLABORADOR NÃO ACESSA O FINANCEIRO");
         try {
             financeiro.lancarDespesa("Tentativa", CategoriaDespesa.OUTROS, 10, LocalDate.of(2026, 11, 1));
@@ -334,7 +334,6 @@ public class Academia {
         }
         System.out.println("Bia troca a própria senha: " + colabs.alterarMinhaSenha("abcd", "nova123"));
 
-        // ------------------------------------------------------------------
         titulo("10. DESPESAS E BALANÇO MENSAL (ADMINISTRADORA)");
         sistema.logout();
         sistema.login("stephanie", "admin123");
@@ -350,7 +349,7 @@ public class Academia {
         }
         System.out.println(financeiro.gerarBalancoMensal(2026, 11));
 
-        // ------------------------------------------------------------------
+        // Questão 11: contadores estáticos / Questão 12: método de classe
         titulo("11. CONTADORES DE INSTÂNCIAS (VARIÁVEIS E MÉTODO DE CLASSE)");
         System.out.println("Clientes (private static + get): " + Sistema.getTotalClientesCriados());
         System.out.println("Clientes (protected static):     " + Sistema.getContadorClientesProtected());
@@ -362,7 +361,7 @@ public class Academia {
             System.out.println("set com valor negativo bloqueado: " + e.getMessage());
         }
 
-        // ------------------------------------------------------------------
+        // Questão 14: salvar e recuperar em JSON
         titulo("12. SALVAR E RECUPERAR EM JSON");
         sistema.salvarDados();
         System.out.println("Dados salvos em 'dados/'. " + sistema);
@@ -383,9 +382,7 @@ public class Academia {
                 + recuperado.getCadastroColaboradores().buscar(dona.getId()).podeGerenciarFinanceiro());
         System.out.println("Contadores após carregar (não mudam): " + Sistema.contarInstancias());
 
-        // ------------------------------------------------------------------
-        // Chamadas diretas de funções que nas seções anteriores só eram
-        // usadas por dentro de outras.
+        // Questões 3 e 4: toString() e super (usados em todos os objetos impressos)
         titulo("13. OUTRAS FUNÇÕES");
         System.out.println("Alguém logado? " + recuperado.getSessao().estaLogado()
                 + " (" + recuperado.getSessao().getUsuarioLogado().getNome() + ")");
@@ -418,13 +415,10 @@ public class Academia {
         recuperado.logout();
         System.out.println("Depois do logout, alguém logado? " + recuperado.getSessao().estaLogado());
 
-        // ------------------------------------------------------------------
+        // Questão 18
         {
-            titulo("14. ITERATOR E FOREACH");
-            // O ArrayList implementa a interface Iterable, então sabe criar um
-            // Iterator: um objeto que "aponta" para a posição atual da lista.
-            // hasNext() pergunta se ainda há elemento; next() devolve o
-            // elemento e avança para o próximo.
+            titulo("QUESTÃO 18 - ITERATOR E FOREACH");
+            // percorrendo a lista com Iterator
             List<Cliente> listaClientes = new ArrayList<>(clientes.getTodos());
             Iterator<Cliente> iterator = listaClientes.iterator();
             System.out.println("-- Percorrendo com Iterator (while hasNext / next) --");
@@ -432,16 +426,13 @@ public class Academia {
                 imprimir(iterator.next());
             }
 
-            // O foreach é uma forma resumida de escrever o mesmo laço: o
-            // compilador o transforma no código acima (cria o Iterator e chama
-            // hasNext() e next() automaticamente).
+            // mesmo percurso usando foreach
             System.out.println("-- Percorrendo com foreach --");
             for (Cliente c : listaClientes) {
                 imprimir(c);
             }
 
-            // Com o Iterator dá para remover com segurança durante o percurso;
-            // no foreach, remover da lista lança ConcurrentModificationException.
+            // remover com Iterator funciona; remover dentro do foreach dá erro
             Iterator<Cliente> it2 = listaClientes.iterator();
             while (it2.hasNext()) {
                 if (it2.next().calcularTotalConta() < 50) {
@@ -462,9 +453,9 @@ public class Academia {
             }
         }
 
-        // ------------------------------------------------------------------
+        // Questão 19
         {
-            titulo("15.COMPARATOR E COLLECTIONS.SORT");
+            titulo("QUESTÃO 19 - COMPARATOR E COLLECTIONS.SORT");
             Comparator<Cliente> porNome = new ClientePorNome();
             Comparator<Cliente> porGasto = new ClientePorTotalGasto();
             System.out.println("porNome.compare(Ana, Pedro)  = " + porNome.compare(ana, pedro) + " (negativo: Ana vem antes)");
@@ -497,9 +488,9 @@ public class Academia {
             }
         }
 
-        // ------------------------------------------------------------------
+        // Questão 20
         {
-            titulo("16. ENCONTRAR(ITERATOR + COMPARATOR) x BINARYSEARCH");
+            titulo("QUESTÃO 20 - ENCONTRAR (ITERATOR + COMPARATOR) x BINARYSEARCH");
             Comparator<Cliente> porNome = new ClientePorNome();
             Comparator<Cliente> porId = new ClientePorId();
             // A chave é um Cliente "modelo" só com o campo procurado preenchido.
@@ -525,13 +516,10 @@ public class Academia {
             System.out.println("binarySearch(lista ordenada por id, id 2) = posição " + posId
                     + " -> " + ordenadaPorId.get(posId).getNome());
 
-            System.out.println("Comparação:");
-            System.out.println("  encontrar(): busca sequencial com Iterator, funciona com a lista em qualquer ordem,");
-            System.out.println("               devolve o próprio cliente (ou null); no pior caso olha todos (O(n)).");
-            System.out.println("  binarySearch(): divide a lista ao meio a cada passo (O(log n)), mas exige a lista");
-            System.out.println("               ordenada pelo mesmo critério e devolve a POSIÇÃO (negativa se não achar).");
+            System.out.println("encontrar: percorre a lista toda, em qualquer ordem, e devolve o cliente");
+            System.out.println("binarySearch: precisa da lista ordenada e devolve a posição");
         }
-        // ------------------------------------------------------------------
+        // Questão 21
         cenarioDezClientes();
     }
 
@@ -557,7 +545,7 @@ public class Academia {
      * @throws IOException se houver erro ao salvar os dados do cenário
      */
     private static void cenarioDezClientes() throws IOException {
-        titulo("17.CENÁRIO COM 10 CLIENTES");
+        titulo("QUESTÃO 21 - CENÁRIO COM 10 CLIENTES");
         Sistema s = new Sistema("dados_cenario");
         CadastroColaboradores colabs = s.getCadastroColaboradores();
         CadastroClientes clientes = s.getCadastroClientes();

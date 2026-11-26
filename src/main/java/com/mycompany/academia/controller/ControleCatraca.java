@@ -20,7 +20,6 @@ import java.util.List;
  * repassa para o subsistema {@link Catraca}, que guarda os registros e gera
  * os relatórios.
  *
- * @author Ste
  */
 public class ControleCatraca {
 

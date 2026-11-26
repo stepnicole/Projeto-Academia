@@ -11,7 +11,6 @@ package com.mycompany.academia.model;
  * senha atual. Assim, nenhuma outra classe consegue ler a senha nem
  * trocá-la sem conhecer a senha antiga.
  *
- * @author Stephanie Nicole de Souza Silva
  */
 public class Colaborador extends Pessoa {
 

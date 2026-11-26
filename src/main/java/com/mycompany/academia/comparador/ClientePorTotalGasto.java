@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena clientes do que mais gastou na academia para o que menos gastou.
  *
- * @author Ste
  */
 public class ClientePorTotalGasto implements Comparator<Cliente> {
 

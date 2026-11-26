@@ -16,7 +16,6 @@ import java.util.List;
  * Administradores ficam numa lista separada porque o Gson não guarda a
  * subclasse; numa lista única eles voltariam do JSON como Colaborador comum.
  *
- * @author Ste
  */
 
 public class CadastroColaboradores {

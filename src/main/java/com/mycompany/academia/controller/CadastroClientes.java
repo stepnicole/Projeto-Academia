@@ -15,7 +15,6 @@ import java.util.List;
  * Cadastro de clientes (incluir, editar,
  * remover, buscar, listar) e emissão da conta do cliente.
  *
- * @author Ste
  */
 public class CadastroClientes {
 

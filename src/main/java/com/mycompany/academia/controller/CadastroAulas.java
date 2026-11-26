@@ -15,7 +15,6 @@ import java.util.List;
  * Grade de aulas (instrutores e as aulas de
  * cada sala).
  *
- * @author Stephanie Nicole de Souza Silva
  */
 public class CadastroAulas {
 

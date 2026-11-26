@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Agrupa agendamentos por cliente (id do cliente) e depois pelo id do agendamento.
  *
- * @author Ste
  */
 public class AgendamentoPorCliente implements Comparator<Agendamento> {
 

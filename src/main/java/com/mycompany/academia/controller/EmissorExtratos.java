@@ -15,7 +15,6 @@ import java.util.List;
  * arquivo .txt. É usado tanto pelos agendamentos quanto pela lojinha, por isso
  * fica separado de ambos.
  *
- * @author Ste
  */
 public class EmissorExtratos {
 

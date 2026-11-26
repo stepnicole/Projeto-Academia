@@ -7,7 +7,6 @@ import java.util.Comparator;
  * Ordena agendamentos pelo status (preliminar, confirmado, realizado, cancelado)
  * e, em caso de empate, pela data.
  *
- * @author Ste
  */
 public class AgendamentoPorStatus implements Comparator<Agendamento> {
 

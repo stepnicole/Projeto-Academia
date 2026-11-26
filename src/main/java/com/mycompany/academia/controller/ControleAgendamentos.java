@@ -27,7 +27,6 @@ import java.util.List;
  * ({@code Preliminar}, {@code Confirmado}, {@code Realizado},
  * {@code Cancelado}); este serviço coordena vaga na aula, pagamento e extrato.
  *
- * @author Ste
  */
 public class ControleAgendamentos {
 

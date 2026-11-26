@@ -31,7 +31,6 @@ import java.util.List;
  * Classe utilitária: só tem métodos estáticos, por isso o construtor é
  * privado e não há atributos de instância (nem get/set).
  *
- * @author Stephanie Nicole de Souza Silva
  */
 public final class Persistencia {
 

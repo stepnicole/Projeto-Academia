@@ -12,15 +12,15 @@ import java.util.Map;
  * Não guarda dados nem regras próprias: só coordena as três partes do
  * subsistema nas operações que envolvem mais de uma delas.
  * <ul>
- *   <li>{@link CatalogoProdutos} — quais produtos existem e seus preços;</li>
- *   <li>{@link Estoque} — quantas unidades há de cada produto;</li>
- *   <li>{@link HistoricoVendas} — o que já foi vendido.</li>
+ * <li>{@link CatalogoProdutos}: quais produtos existem e seus preços;</li>
+ * <li>{@link Estoque}: quantas unidades há de cada produto;</li>
+ * <li>{@link HistoricoVendas}: o que já foi vendido.</li>
  * </ul>
- * Quem usa a lojinha (o {@code ControleLojinha}) fala só com esta classe e
- * não precisa saber como ela é organizada por dentro. Operações que envolvem
- * uma parte só (ex.: buscar produto por nome, ranking de vendas) são feitas
- * direto na parte, obtida por {@link #getCatalogo()}, {@link #getEstoque()}
- * ou {@link #getHistoricoVendas()}.
+ * Quem usa a lojinha (o {@code ControleLojinha}) fala só com esta classe e não
+ * precisa saber como ela é organizada por dentro. Operações que envolvem uma
+ * parte só (ex.: buscar produto por nome, ranking de vendas) são feitas direto
+ * na parte, obtida por {@link #getCatalogo()}, {@link #getEstoque()} ou
+ * {@link #getHistoricoVendas()}.
  *
  */
 public class Lojinha {
@@ -29,7 +29,9 @@ public class Lojinha {
     private Estoque estoque;
     private final HistoricoVendas historicoVendas;
 
-    /** Cria a lojinha vazia. */
+    /**
+     * Cria a lojinha vazia.
+     */
     public Lojinha() {
         this.catalogo = new CatalogoProdutos();
         this.estoque = new Estoque();
@@ -39,16 +41,16 @@ public class Lojinha {
     /**
      * Cadastra o produto no catálogo e já o coloca no estoque.
      *
-     * @param nome             nome
-     * @param descricao        descrição
-     * @param categoria        lanchonete ou loja
-     * @param preco            preço de venda
-     * @param quantidade       quantidade inicial no estoque
+     * @param nome nome
+     * @param descricao descrição
+     * @param categoria lanchonete ou loja
+     * @param preco preço de venda
+     * @param quantidade quantidade inicial no estoque
      * @param quantidadeMinima mínimo para alerta de reposição
      * @return o produto criado
      */
     public Produto cadastrarProduto(String nome, String descricao, CategoriaProduto categoria,
-                                    double preco, int quantidade, int quantidadeMinima) {
+            double preco, int quantidade, int quantidadeMinima) {
         if (quantidade < 0) {
             throw new IllegalArgumentException("Quantidade não pode ser negativa.");
         }
@@ -92,7 +94,7 @@ public class Lojinha {
     }
 
     /**
-     * @param idProduto  produto
+     * @param idProduto produto
      * @param quantidade unidades recebidas
      * @return false se o produto não está no estoque
      */
@@ -100,7 +102,9 @@ public class Lojinha {
         return estoque.darEntrada(idProduto, quantidade);
     }
 
-    /** @return produtos que precisam ser repostos */
+    /**
+     * @return produtos que precisam ser repostos
+     */
     public List<Produto> produtosParaRepor() {
         List<Produto> lista = new ArrayList<>();
         for (ItemEstoque item : estoque.itensAbaixoDoMinimo()) {
@@ -118,10 +122,11 @@ public class Lojinha {
      * para não deixar o estoque pela metade se um item faltar.
      *
      * @param idCliente cliente que está comprando
-     * @param pedido    mapa idProduto → quantidade
-     * @param dataHora  momento da venda
+     * @param pedido mapa idProduto → quantidade
+     * @param dataHora momento da venda
      * @return a venda registrada
-     * @throws IllegalArgumentException    se o pedido estiver vazio ou um produto não existir
+     * @throws IllegalArgumentException se o pedido estiver vazio ou um produto
+     * não existir
      * @throws EstoqueInsuficienteExcecao se faltar estoque de algum item
      */
     public Venda registrarVenda(int idCliente, Map<Integer, Integer> pedido, LocalDateTime dataHora) {
@@ -149,26 +154,39 @@ public class Lojinha {
         return historicoVendas.registrar(idCliente, itens, dataHora);
     }
 
-    /** @return o catálogo de produtos */
-    public CatalogoProdutos getCatalogo() { return catalogo; }
-
-    /** @return o estoque */
-    public Estoque getEstoque() { return estoque; }
+    /**
+     * @return o catálogo de produtos
+     */
+    public CatalogoProdutos getCatalogo() {
+        return catalogo;
+    }
 
     /**
-     * Troca o estoque (usado ao carregar o JSON, pois o Estoque é salvo como
-     * um objeto único).
+     * @return o estoque
+     */
+    public Estoque getEstoque() {
+        return estoque;
+    }
+
+    /**
+     * Troca o estoque (usado ao carregar o JSON, pois o Estoque é salvo como um
+     * objeto único).
      *
      * @param estoque estoque recuperado
      */
-    public void setEstoque(Estoque estoque) { this.estoque = estoque; }
+    public void setEstoque(Estoque estoque) {
+        this.estoque = estoque;
+    }
 
-    /** @return o histórico de vendas */
-    public HistoricoVendas getHistoricoVendas() { return historicoVendas; }
+    /**
+     * @return o histórico de vendas
+     */
+    public HistoricoVendas getHistoricoVendas() {
+        return historicoVendas;
+    }
 
     // Sem setters para catálogo e histórico: são final e recebem os dados
     // do arquivo pelos seus próprios métodos carregar().
-
     @Override
     public String toString() {
         return "Lojinha{" + catalogo + ", " + historicoVendas

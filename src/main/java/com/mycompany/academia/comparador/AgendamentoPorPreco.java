@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena agendamentos pelo preço, do mais barato para o mais caro.
  *
- * @author Ste
  */
 public class AgendamentoPorPreco implements Comparator<Agendamento> {
 

@@ -6,7 +6,6 @@ import java.util.Comparator;
 /**
  * Ordena clientes pelo id, do menor para o maior.
  *
- * @author Ste
  */
 public class ClientePorId implements Comparator<Cliente> {
 

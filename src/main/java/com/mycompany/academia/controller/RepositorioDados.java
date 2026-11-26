@@ -22,7 +22,6 @@ import java.io.IOException;
  * Salvar e recuperartodos os dados do sistema
  * em arquivos JSON (um arquivo por tipo de dado), usando {@link Persistencia}.
  *
- * @author Ste
  */
 public class RepositorioDados {
 

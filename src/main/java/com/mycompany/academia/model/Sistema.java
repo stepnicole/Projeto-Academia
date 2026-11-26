@@ -19,46 +19,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Ponto de entrada do sistema da academia GYM CORN - Milho Verde.
- * <p>
- * A classe Sistema apenas cria os serviços, liga um ao outro
- * (composição) e dá acesso a eles. Cada serviço tem uma única
- * responsabilidade:
- * <ul>
- *   <li>{@link Sessao} — login e permissões;</li>
- *   <li>{@link CadastroClientes} — clientes e conta do cliente;</li>
- *   <li>{@link CadastroColaboradores} — colaboradores, administradores e senhas;</li>
- *   <li>{@link CadastroAulas} — instrutores e aulas;</li>
- *   <li>{@link ControleAgendamentos} — agendamentos e pagamentos;</li>
- *   <li>{@link ControleLojinha} — vendas da lojinha/lanchonete;</li>
- *   <li>{@link ControleCatraca} — integração com a catraca externa;</li>
- *   <li>{@link Financeiro} — relatórios de vendas, despesas e balanço;</li>
- *   <li>{@link EmissorExtratos} — emissão dos extratos;</li>
- *   <li>{@link RepositorioDados} — salvar/carregar em JSON.</li>
- * </ul>
- *
- * <h2>Contadores de instâncias de Cliente (item 11)</h2>
- * <ol>
- *   <li><b>{@code private static int totalClientesCriados}</b> com
- *   {@code get}/{@code set} estáticos (encapsulamento).<br>
- *   <i>Vantagens:</i> nenhuma outra classe altera o valor diretamente; o
- *   {@code set} pode validar (aqui, não aceita valor negativo); a
- *   implementação interna pode mudar sem afetar quem usa.<br>
- *   <i>Desvantagens:</i> mais código; o {@code set} público ainda permite que
- *   qualquer classe coloque um valor errado (positivo).</li>
- *   <li><b>{@code protected static int contadorClientesProtected}</b>, acessado
- *   diretamente com {@code Sistema.contadorClientesProtected++}.<br>
- *   <i>Vantagens:</i> mais simples e direto; não precisa de métodos.<br>
- *   <i>Desvantagens:</i> em Java, {@code protected} libera o acesso para
- *   <b>todas as classes do mesmo pacote</b> e para subclasses, sem nenhuma
- *   validação (dá para zerar ou deixar negativo); quebra o encapsulamento e
- *   acopla as classes ao nome do atributo.</li>
- * </ol>
- * Os contadores contam só objetos criados pelo construtor. Objetos lidos do
- * JSON não contam, pois o Gson não chama o construtor (não são clientes
- * novos, apenas recuperados).
- *
+ * Classe principal do sistema da academia GYM CORN - Milho Verde.
+ * Cria os serviços (cadastros, agendamentos, lojinha, catraca e financeiro)
+ * e guarda os contadores de instâncias de Cliente e Produto.
  */
+
 public class Sistema {
 
     // ===================================================== variáveis de classe
